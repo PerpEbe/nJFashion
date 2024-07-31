@@ -11,7 +11,8 @@ app.use(express.json()); //pass whatever request in json format
 app.use(cors()); //get access to react frontend and connecting it with the backend
 
 //Database Connection with MongoDB
-const connectionString = "mongodb://127.0.0.1:27017/njFashion";
+// const connectionString = "mongodb://127.0.0.1:27017/njFashion";
+const connectionString = "mongodb+srv://ewasilwa19:ayBXWmeVoZBOsiop@cluster0.iqxrvqz.mongodb.net/";
 mongoose.connect(connectionString);
 
 //API Creation
