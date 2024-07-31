@@ -45,7 +45,8 @@ app.post("/upload", (req, res) => {
     // Multer upload successful, send response
     res.json({
       success: 1,
-      image_url: `http://localhost:${port}/images/${req.file.filename}`,
+      // image_url: `http://localhost:${port}/images/${req.file.filename}`,
+      image_url: `n-j-fashion-backend.vercel.app:${port}/images/${req.file.filename}`,
     });
   });
 });
