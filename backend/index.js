@@ -46,7 +46,7 @@ app.post("/upload", (req, res) => {
     res.json({
       success: 1,
       // image_url: `http://localhost:${port}/images/${req.file.filename}`,
-      image_url: `https://n-j-fashion-backend.vercel.app/images/${req.file.filename}`,
+      image_url: `n-j-fashion-backend.vercel.app/images/${req.file.filename}`,
     });
   });
 });
