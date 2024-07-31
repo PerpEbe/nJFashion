@@ -30,7 +30,7 @@ const AddProduct = () => {
     let formData = new FormData();
     formData.append("product", image);
 
-    await fetch("http://localhost:4000/upload", {
+    await fetch("https://n-j-fashion-backend.vercel.app/upload", {
       method: "post",
       header: {
         Accept: "application/json",
@@ -45,7 +45,7 @@ const AddProduct = () => {
     if (responseData.success) {
       product.image = responseData.image_url;
       console.log(product);
-      await fetch('http://localhost:4000/addproduct',{
+      await fetch('https://n-j-fashion-backend.vercel.app/addproduct',{
         method:'post',
         headers:{
           Accept:'application/json',
