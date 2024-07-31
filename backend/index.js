@@ -12,7 +12,7 @@ app.use(cors()); //get access to react frontend and connecting it with the backe
 
 //Database Connection with MongoDB
 // const connectionString = "mongodb://127.0.0.1:27017/njFashion";
-const connectionString = "mongodb+srv://ewasilwa19:ayBXWmeVoZBOsiop@cluster0.iqxrvqz.mongodb.net/";
+const connectionString = "mongodb+srv://ewasilwa19:ayBXWmeVoZBOsiop@cluster0.iqxrvqz.mongodb.net/nJFashion";
 mongoose.connect(connectionString);
 
 //API Creation
