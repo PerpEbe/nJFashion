@@ -34,14 +34,14 @@ const ProductDisplay = (props) => {
         </div>
         <div className="productdisplay-right-prices">
           <div className="productdisplay-right-price-old">
-            ${product.old_price}
+            Ksh. {product.old_price}
           </div>
           <div className="productdisplay-right-price-new">
-            ${product.new_price}
+            Ksh. {product.new_price}
           </div>
         </div>
         <div className="productdisplay-right-description">
-          A light weight, usually knitted, pullover shirt.
+          {product.description}
         </div>
         <div className="productdisplay-right-size">
           <h1>Select Size</h1>
@@ -61,7 +61,7 @@ const ProductDisplay = (props) => {
           ADD TO CART
         </button>
         <p className="productdisplay-right-category">
-          <span>Category: </span>Women, T-shirt, crop Top
+          <span>Category: </span>{product.category}
         </p>
         <p className="productdisplay-right-category">
           <span>Tags: </span>Modern Latest

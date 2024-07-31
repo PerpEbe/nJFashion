@@ -10,17 +10,17 @@ const DescriptionBox = () => {
       </div>
       <div className="descriptionbox-description">
         <p>
-          An ecommerce website is an onoine platform that facilitates the buying
-          and seling of products or ser eces over te internet seves as a virtual
-          marketlace where buiness and individula showcase their producst,
+          An ecommerce website is an online platform that facilitates the buying
+          and seling of products or services over the internet. Serves as a virtual
+          marketplace where business and individuals showcase their product,
           interact with customers and conducts transactions without the need for
-          a physical presence. E commerce webiste have gained immerse popularity
-          due to their convinience accessibility and the globla reach they offer
+          a physical presence. E-commerce webiste have gained immerse popularity
+          due to their convinience accessibility and the global reach they offer
         </p>
         <p>
-          An ecommerce website is an onoine platform that facilitates the buying
-          and seling of products or ser eces over te internet seves as a virtual
-          marketlace where buiness and individula
+        An ecommerce website is an online platform that facilitates the buying
+          and seling of products or services over the internet. Serves as a virtual
+          marketplace where business and individuals showcase their product.
         </p>
       </div>
     </div>

@@ -11,10 +11,10 @@ const Footer = () => {
     <div className="footer">
       <div className="footer-logo">
         <img src={footer_logo} alt="" />
-        <p>Candy & Choco</p>
+        <p>Nj Fashion</p>
       </div>
       <ul className="footer-links">
-        <li>Candy & Choco</li>
+        <li>Nj Fashion</li>
         <li>Products</li>
         <li>Offices</li>
         <li>About</li>
