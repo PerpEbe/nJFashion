@@ -39,7 +39,7 @@ const AddProduct = () => {
         image: image_url,
       };
       try {
-        const resonse2 = await fetch("http://localhost:4000/addproduct", {
+        const resonse2 = await fetch("https://n-j-fashion-backend.vercel.app/addproduct", {
           method: "post",
           headers: {
             Accept: "application/json",
