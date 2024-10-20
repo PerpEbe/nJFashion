@@ -14,7 +14,7 @@ const Footer = () => {
         <p>nJFashion</p>
       </div>
       <ul className="footer-links">
-        <li>Candy & Choco</li>
+        <li>nJFashion</li>
         <li>Products</li>
         <li>Offices</li>
         <li>About</li>
