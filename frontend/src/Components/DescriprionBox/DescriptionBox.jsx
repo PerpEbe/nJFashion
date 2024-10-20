@@ -1,7 +1,9 @@
 import React from "react";
 import "./DescriptionBox.css";
+// import { ShopContext } from "../../Context/ShopContext";
 
-const DescriptionBox = () => {
+const DescriptionBox = (props) => {
+  const {product}= props;
   return (
     <div className="descriptionbox">
       <div className="descriptionbox-navigator">
@@ -10,12 +12,7 @@ const DescriptionBox = () => {
       </div>
       <div className="descriptionbox-description">
         <p>
-          An ecommerce website is an onoine platform that facilitates the buying
-          and seling of products or ser eces over te internet seves as a virtual
-          marketlace where buiness and individula showcase their producst,
-          interact with customers and conducts transactions without the need for
-          a physical presence. E commerce webiste have gained immerse popularity
-          due to their convinience accessibility and the globla reach they offer
+         {product.description}
         </p>
         <p>
           An ecommerce website is an onoine platform that facilitates the buying
