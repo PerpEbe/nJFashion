@@ -22,7 +22,7 @@ export const Navbar = () => {
         <Link to="/">
           <img src={logo} alt="logo" />
         </Link>
-        <p>Candy & Choco</p>
+        <p>nJFashion</p>
       </div>
       <img
         onClick={dropdown_toggle}

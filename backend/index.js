@@ -13,6 +13,7 @@ const {
   ref,
   uploadBytes,
   getDownloadURL,
+  imageRef,
 } = require("firebase/storage");
 
 app.use(express.json()); //pass whatever request in json format
@@ -45,11 +46,13 @@ app.get("/", (req, res) => {
 // app.use("/images", express.static(path.join(__dirname, "upload/images")));
 
 app.post("/upload", multer().single("image"), async (req, res) => {
-  if (!req.file){ return res.status(400).json({ error: "No file uploaded" });}
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
 
-  const storage=getStorage(app);
+  const storage = getStorage(app);
   const storageRef = ref(storage, `images/${req.file.originalname}`); // Create a reference with image name
-  
+
   try {
     const uploadTask = await uploadBytes(storageRef, req.file.buffer);
     const imageURL = await getDownloadURL(uploadTask.ref);
@@ -61,40 +64,7 @@ app.post("/upload", multer().single("image"), async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-
-  // upload.single("product")(req, res, (err) => {
-  //   // if (err) {
-  //   //   // Handle Multer errors
-  //   //   return res.status(400).json({ error: err.message });
-  //   // }
-  //   // Multer upload successful, send response
-  //   res.json({
-  //     success: 1,
-  //     image_url: `http://localhost:${port}/images/${req.file.filename}`,
-  //   });
-  // });
 });
-
-// const uploadImage = async () => {
-//   if (image) {
-//     try {
-//       // Firebase Storage reference for the image
-//       const storage = getStorage(app);
-//       const storageRef = ref(storage, "images/" + image.name);
-
-//       // Upload the image to Firebase Storage
-//       await uploadBytes(storageRef, image);
-
-//       // Get the download URL for the uploaded image
-//       const image_url = await getDownloadURL(storageRef);
-
-//       return image_url; // Return the download URL
-//     } catch (error) {
-//       console.error("Error uploading image:", error);
-//       return null; // Return null in case of error
-//     }
-//   }
-// };
 
 //Schema for creating products
 
@@ -123,6 +93,16 @@ const Product = mongoose.model("Product", {
     type: Number,
     required: true,
   },
+
+  tag: {
+    type: String,
+    required: true,
+  },
+
+  description: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,
@@ -145,8 +125,8 @@ app.post("/addproduct", async (req, res) => {
     id = 1; // For the first product in the database, id will be 1.  For subsequent products, it will be incremented by 1 from the last product's id.  This ensures the id is always unique and in ascending order.  The default value for available is true.  If a product is not available, it can be set to false.  This will help in tracking the availability of products.  For example, a product with id 1 might be out of stock, and thus available would be set to false.  In this case, it would not be displayed in the frontend.  The user can still add this product to their cart, but it would not be available for purchase.  This design allows for easy management of products and their availability.  This design also allows for easy addition of new products to the database in the future without having to change the id of existing products.  This design also allows for easy updating of product details,
   }
 
-  const productData=req.body;
-  const imageURL=productData.image;
+  const productData = req.body;
+  const imageURL = productData.image;
 
   const product = new Product({
     id: id,
@@ -155,20 +135,36 @@ app.post("/addproduct", async (req, res) => {
     category: req.body.category,
     new_price: req.body.new_price,
     old_price: req.body.old_price,
+    tag: req.body.tag,
+    description: req.body.description,
   });
   console.log(product);
   await product.save();
   console.log("Saved Successfully");
   res.json({
     success: true,
-    message:"Product added successfully",
+    message: "Product added successfully",
     name: req.body.name,
   });
 });
 
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
-  await Product.findOneAndDelete({ id: req.body.id });
+  const { id } = req.body;
+  try {
+    const product = await Product.findOneAndDelete({ id: req.body.id });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const storage = getStorage();
+    const imageRef = ref(storage, product.image_url);
+
+    res.json({ success: true, name: product.name });
+  } catch (error) {
+    console.log(error);
+  }
+
   console.log("Product deleted successfully");
   res.json({
     success: true,
@@ -314,18 +310,18 @@ app.post("/removefromcart", fetchUser, async (req, res) => {
 });
 
 //Creating endpoint to get cartdata
-app.post('/getcart', fetchUser, async (req, res) => {
+app.post("/getcart", fetchUser, async (req, res) => {
   try {
-      const userData = await Users.findOne({ _id: req.user.id });
+    const userData = await Users.findOne({ _id: req.user.id });
 
-      if (!userData) {
-          return res.status(404).send("User not found"); // Handle user not found scenario
-      }
+    if (!userData) {
+      return res.status(404).send("User not found"); // Handle user not found scenario
+    }
 
-      res.json(userData.cartData); // Send response only if user is found
+    res.json(userData.cartData); // Send response only if user is found
   } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal server error"); // Handle unexpected errors
+    console.error(error);
+    res.status(500).send("Internal server error"); // Handle unexpected errors
   }
 });
 

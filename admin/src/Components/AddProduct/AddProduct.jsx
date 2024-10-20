@@ -15,6 +15,8 @@ const AddProduct = () => {
     category: "women",
     new_price: "",
     old_price: "",
+    tag: "",
+    description: "",
   });
 
   // const imageHandler = (e) => {
@@ -93,7 +95,30 @@ const AddProduct = () => {
             placeholder="Type Here"
           />
         </div>
-      </div>
+        </div>
+        <div className="addproduct-itemfield">
+          <p>Tag</p>
+          <input
+            value={productDetails.tag}
+            onChange={changeHandler}
+            type="text"
+            name="tag"
+            placeholder="Type Here"
+          />
+        </div>
+        <div className="addproduct-itemfield">
+          <p>Description</p>
+          <textarea
+            rows={4}
+            cols={70}
+            maxLength={200}
+            value={productDetails.description}
+            onChange={changeHandler}
+            type="textarea"
+            name="description"
+            placeholder="Type Here">
+          </textarea>
+        </div>
       <div className="addproduct-itemfield">
         <p>Product Category</p>
         <select

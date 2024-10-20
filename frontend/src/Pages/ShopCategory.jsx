@@ -27,18 +27,16 @@ const ShopCategory = (props) => {
                 id={item.id}
                 name={item.name}
                 image={item.image}
-                new_price={item.new_price}
-                old_price={item.old_price}
+                new_price={`Ksh ${item.new_price}`} // Add dollar sign with template literal
+                old_price={`Ksh ${item.old_price}`}
               />
             );
-          }else{
+          } else {
             return null;
           }
         })}
       </div>
-      <div className="shopcategory-loadmore">
-        Explore More
-      </div>
+      <div className="shopcategory-loadmore">Explore More</div>
     </div>
   );
 };

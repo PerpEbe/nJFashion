@@ -3,15 +3,18 @@ import React from "react";
 import "./ListProduct.css";
 import { useState, useEffect } from "react";
 import cross_icon from "../../assets/cross_icon.png";
+
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
 
   const fetchInfo = async () => {
-    await fetch("http://localhost:4000/allproducts")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setAllProducts(data);
-      });
+    try {
+      const response = await fetch("http://localhost:4000/allproducts");
+      const data = await response.json();
+      setAllProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   useEffect(() => {
@@ -19,6 +22,19 @@ const ListProduct = () => {
   }, []);
 
   const remove_product = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/removeproduct?id=${id}`
+      );
+      if (response.ok) {
+        await fetchInfo();
+      } else {
+        console.log("Error deleting product:");
+      }
+    } catch (error) {
+      console.error("Error removing product:", error);
+    }
+
     await fetch("http://localhost:4000/removeproduct", {
       method: "POST",
       headers: {
@@ -29,6 +45,7 @@ const ListProduct = () => {
     });
     await fetchInfo();
   };
+
   return (
     <div className="list-product">
       <h1>All Products List</h1>
