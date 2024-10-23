@@ -3,13 +3,14 @@ import React from "react";
 import "./ListProduct.css";
 import { useState, useEffect } from "react";
 import cross_icon from "../../assets/cross_icon.png";
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import { storage } from "../../firebase";
+import { ref, deleteObject } from "firebase/storage";
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
 
   const fetchInfo = async () => {
-    await fetch("http://localhost:4000/allproducts")
+    await fetch("https://n-j-fashion-backend.vercel.app/allproducts")
       .then((resp) => resp.json())
       .then((data) => {
         setAllProducts(data);
@@ -20,50 +21,50 @@ const ListProduct = () => {
     fetchInfo();
   }, []);
 
-  
-
   const remove_product = async (id) => {
-
-    const getProductDetails = async (id) => {
-      const response = await fetch(`http://localhost:4000/removeproduct/${id}`);
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const productToDelete = allproducts.find((product) => product.id === id);
+      if (!productToDelete) {
+        console.error("Product not found");
+        return;
       }
-  
-      const productData = await response.json();
-      return productData;
-    };
-    
-    const deleteImage = async (imageUrl) => {
-      try {
-        const storage = getStorage();
-        const imageRef = ref(storage, imageUrl);
-  
-        await deleteObject(imageRef);
-        console.log("Image deleted successfully");
-      } catch (error) {
-        console.error("Error deleting image:", error);
-        throw error;
+      // Delete the image from Firebase Storage (assuming image name is stored in product.image)
+      await deleteImage(productToDelete.image);
+
+      // Call your backend API to remove the product from the database
+      const response = await fetch(
+        "https://n-j-fashion-backend.vercel.app/removeproduct",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: id }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchInfo(); // Update product list after successful deletion
+      } else {
+        console.error(
+          "Error deleting product from backend:",
+          response.statusText
+        );
       }
-    };
+    } catch (error) {
+      console.error("Error removing product:", error);
+    }
+  };
 
-    const product = await getProductDetails(id);
-    const imageUrl = await product.image_url;
-    await deleteImage(imageUrl);
-
-    // export default deleteImage;
-    // };
-
-    await fetch("http://localhost:4000/removeproduct", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: id }),
-    });
-    await fetchInfo();
+  const deleteImage = async (image) => {
+    try {
+      const imageRef = ref(storage, `images/${image}`);
+      await deleteObject(imageRef);
+      console.log("Image deleted successfully");
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
   };
 
   return (

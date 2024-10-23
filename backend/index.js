@@ -27,6 +27,8 @@ mongoose.connect(connectionString);
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5713"); // Replace with your frontend's origin
+  res.json(data);
 });
 
 //Image Storage Engine
@@ -148,17 +150,39 @@ app.post("/addproduct", async (req, res) => {
   });
 });
 
+// Create the backend route for fetching product details
+// app.get("/product/:id", async (req, res) => {
+//   try {
+//     const productId = req.params.id;
+//     const product = await Product.findById(productId);
+
+//     if (!product) {
+//       return res.status(404).json({
+//         message: "Product not found",
+//       });
+//     }
+
+//     res.json(product);
+//   } catch (error) {
+//     console.error("Error fetching product:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
-  const { id } = req.body;
+  const { id, imageUrl } = req.body;
+
+  // Delete the image
   try {
+    await deleteImage(imageUrl);
+
     const product = await Product.findOneAndDelete({ id: req.body.id });
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const storage = getStorage();
-    const imageRef = ref(storage, product.image_url);
+    // const imageRef = ref(storage, product.image_url);
 
     res.json({ success: true, name: product.name });
   } catch (error) {
