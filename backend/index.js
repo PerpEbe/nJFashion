@@ -18,13 +18,23 @@ const {
 
 app.use(express.json()); //pass whatever request in json format
 
+// Specify multiple origins
+const allowedOrigins = [
+  'https://n-j-fashion-admin.vercel.app', 
+  'https://n-j-fashion-frontend.vercel.app'  // Add other frontend origins here
+];
+
 app.use(cors({
-  // origin: ["https://n-j-fashion-backend.vercel.app"], // Replace with your frontend's origin
-  origin: "*", // Replace with your frontend's origin
-  methods: ["GET", "POST", "OPTIONS", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"], 
-  credentials: true, // needed for cookies
-})); //get access to react frontend and connecting it with the backend
+  origin: function (origin, callback) {
+    // If the origin is in the allowed list or it's undefined (e.g., for non-browser requests), allow it
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],  // Specify the allowed methods
+}));
 
 app.options("/removeproduct", (req, res) => {
   res.header("Access-Control-Allow-Methods", "DELETE", "POST, OPTIONS");
