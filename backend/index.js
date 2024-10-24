@@ -17,7 +17,20 @@ const {
 } = require("firebase/storage");
 
 app.use(express.json()); //pass whatever request in json format
-app.use(cors()); //get access to react frontend and connecting it with the backend
+
+app.use(cors({
+  // origin: ["http://localhost:5713"], // Replace with your frontend's origin
+  origin: ["*"], // Replace with your frontend's origin
+  methods: ["GET", "POST", "OPTIONS", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"], 
+  credentials: true, // needed for cookies
+})); //get access to react frontend and connecting it with the backend
+
+app.options("/removeproduct", (req, res) => {
+  res.header("Access-Control-Allow-Methods", "DELETE", "POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  return res.sendStatus(200);
+});
 
 //Database Connection with MongoDB
 const connectionString =
@@ -30,22 +43,6 @@ app.get("/", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5713"); // Replace with your frontend's origin
   res.json(data);
 });
-
-//Image Storage Engine
-// const storage = multer.diskStorage({
-//   destination: path.join(__dirname, "/upload/images"),
-//   filename: (req, file, cb) => {
-//     return cb(
-//       null,
-//       `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
-//     );
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-// //Creating Upload Endpoint for images
-
-// app.use("/images", express.static(path.join(__dirname, "upload/images")));
 
 app.post("/upload", multer().single("image"), async (req, res) => {
   if (!req.file) {
@@ -150,41 +147,30 @@ app.post("/addproduct", async (req, res) => {
   });
 });
 
-// Create the backend route for fetching product details
-// app.get("/product/:id", async (req, res) => {
-//   try {
-//     const productId = req.params.id;
-//     const product = await Product.findById(productId);
-
-//     if (!product) {
-//       return res.status(404).json({
-//         message: "Product not found",
-//       });
-//     }
-
-//     res.json(product);
-//   } catch (error) {
-//     console.error("Error fetching product:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
-  const { id, imageUrl } = req.body;
+  const { id,image_url } = req.body;
 
-  // Delete the image
+  // const imageURL = ref(storage, product.image_url);
+  
   try {
-    await deleteImage(imageUrl);
+    const storage = getStorage();
 
-    const product = await Product.findOneAndDelete({ id: req.body.id });
+    // Get a reference to the image
+    const storageRef = admin.storage().refFromURL(image_url);
+    console.log(storageRef);
+
+    // Delete the image
+    await storageRef.delete();
+    res.json({ message: "Image deleted successfully" });
+
+    // Delete the product from the database
+    const product = await Product.findByIdAndDelete(id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // const imageRef = ref(storage, product.image_url);
-
-    res.json({ success: true, name: product.name });
+    // res.json({ success: true, name: product.name });
   } catch (error) {
     console.log(error);
   }
