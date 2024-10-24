@@ -19,7 +19,7 @@ const {
 app.use(express.json()); //pass whatever request in json format
 
 app.use(cors({
-  // origin: ["http://localhost:5713"], // Replace with your frontend's origin
+  // origin: ["https://n-j-fashion-backend.vercel.app"], // Replace with your frontend's origin
   origin: ["*"], // Replace with your frontend's origin
   methods: ["GET", "POST", "OPTIONS", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"], 
@@ -40,7 +40,7 @@ mongoose.connect(connectionString);
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5713"); // Replace with your frontend's origin
+  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-backend.vercel.app"); // Replace with your frontend's origin
   res.json(data);
 });
 
