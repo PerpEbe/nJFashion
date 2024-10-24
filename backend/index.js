@@ -20,7 +20,7 @@ app.use(express.json()); //pass whatever request in json format
 
 app.use(cors({
   // origin: ["https://n-j-fashion-backend.vercel.app"], // Replace with your frontend's origin
-  origin: ["*"], // Replace with your frontend's origin
+  origin: "*", // Replace with your frontend's origin
   methods: ["GET", "POST", "OPTIONS", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"], 
   credentials: true, // needed for cookies
