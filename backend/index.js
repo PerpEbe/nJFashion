@@ -166,26 +166,8 @@ app.post("/addproduct", async (req, res) => {
 
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
-<<<<<<< HEAD
   
   
-=======
-  const { id,image_url } = req.body;
-
-  // const imageURL = ref(storage, product.image_url);
-  
-  try {
-    const storage = getStorage();
-
-    // Get a reference to the image
-    const storageRef = admin.storage().refFromURL(image_url);
-    console.log(storageRef);
-
-    // Delete the image
-    await storageRef.delete();
-    res.json({ message: "Image deleted successfully" });
-
->>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
     // Delete the product from the database
     const product = await Product.findByIdAndDelete(id);
     if (!product) {
@@ -193,13 +175,7 @@ app.post("/removeproduct", async (req, res) => {
     }
 
     // res.json({ success: true, name: product.name });
-<<<<<<< HEAD
   
-=======
-  } catch (error) {
-    console.log(error);
-  }
->>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
 
   console.log("Product deleted successfully");
   res.json({
