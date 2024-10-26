@@ -3,7 +3,9 @@ import React from "react";
 import "./ListProduct.css";
 import { useState, useEffect } from "react";
 import cross_icon from "../../assets/cross_icon.png";
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import { doc,deleteDoc,onSnapshot, collection, query } from "firebase/firestore";
+import { db,storage } from "../../firebase.js";
+import {ref,deleteObject} from "firebase/storage"
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
@@ -17,52 +19,38 @@ const ListProduct = () => {
   };
 
   useEffect(() => {
+    const productRef = collection(db, "Products");
+    // const q = query(productRef,orderBy("createdAt","desc"))
+    const q = query(productRef);
+    onSnapshot(q, (snapshot) => {
+      const allproducts = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAllProducts(allproducts);
+      console.log(allproducts);
+    });
     fetchInfo();
   }, []);
 
-  
-
-  const remove_product = async (id) => {
-
-    const getProductDetails = async (id) => {
-      const response = await fetch(`http://localhost:4000/removeproduct/${id}`);
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const productData = await response.json();
-      return productData;
-    };
-    
-    const deleteImage = async (imageUrl) => {
-      try {
-        const storage = getStorage();
-        const imageRef = ref(storage, imageUrl);
-  
-        await deleteObject(imageRef);
-        console.log("Image deleted successfully");
-      } catch (error) {
-        console.error("Error deleting image:", error);
-        throw error;
-      }
-    };
-
-    const product = await getProductDetails(id);
-    const imageUrl = await product.image_url;
-    await deleteImage(imageUrl);
-
-    // export default deleteImage;
-    // };
-
+  const remove_product = async (id, image) => {
+    try {
+      await deleteDoc(doc(db,"Products",id))
+      const storageRef=ref(storage,image)
+      await deleteObject(storageRef)
+    } catch (error) {
+      console.log(error);
+      
+    }
     await fetch("http://localhost:4000/removeproduct", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id: id }),
+      body: JSON.stringify({ id: id, image: image }),
     });
+
     await fetchInfo();
   };
 
@@ -79,11 +67,12 @@ const ListProduct = () => {
       </div>
       <div className="listproduct-allproducts">
         <hr />
-        {allproducts.map((product, index) => {
+        {/* {allproducts.map((product) => { */}
+        {allproducts.map((product) => {
           return (
-            <>
+            <React.Fragment key={product.id}>
               <div
-                key={index}
+                key={product.id} // Unique identifier for each product
                 className="listproduct-format-main listproduct-format"
               >
                 <img
@@ -96,16 +85,14 @@ const ListProduct = () => {
                 <p>${product.new_price}</p>
                 <p>{product.category}</p>
                 <img
-                  onClick={() => {
-                    remove_product(product.id);
-                  }}
+                  onClick={() => remove_product(product.id, product.image)} // Correct event handler
                   src={cross_icon}
                   alt=""
                   className="listproduct-remove-icon"
                 />
               </div>
               <hr />
-            </>
+            </React.Fragment>
           );
         })}
       </div>

@@ -2,12 +2,26 @@ import React, { useEffect, useState } from "react";
 import "./NewCollections.css";
 // import new_collections from '../Assets/new_collections';
 import Item from "../Item/Item";
+import { onSnapshot, collection, query } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const NewCollections = () => {
   const [new_collection, setNew_collection] = useState([]);
 
   useEffect(() => {
-    fetch("https://n-j-fashion-backend.vercel.app/newcollections")
+
+    const newCollectionRef = collection(db, "Products");
+    const q = query(newCollectionRef);
+    onSnapshot(q, (snapshot) => {
+      const new_collection = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNew_collection(new_collection);
+      console.log(new_collection);
+    });
+
+    fetch("http://localhost:4000/newcollections")
       .then((response) => response.json())
       .then((data) => setNew_collection(data));
   }, []);

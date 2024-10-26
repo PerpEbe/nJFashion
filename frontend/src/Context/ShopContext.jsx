@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
+import { db } from "../firebase.js";
+import { query, onSnapshot, collection } from "firebase/firestore";
 
 export const ShopContext = createContext(null);
 
@@ -15,12 +17,22 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
   useEffect(() => {
-    fetch("https://n-j-fashion-backend.vercel.app/allproducts")
+    const productRef = collection(db, "Products");
+    const q = query(productRef);
+    onSnapshot(q, (snapshot) => {
+      const all_product = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAll_Product(all_product);
+    });
+
+    fetch("http://localhost:4000/allproducts")
       .then((response) => response.json())
       .then((data) => setAll_Product(data));
 
     if (localStorage.getItem("auth-token")) {
-      fetch("https://n-j-fashion-backend.vercel.app/getcart", {
+      fetch("http://localhost:4000/getcart", {
         method: "post",
         headers: {
           Accept: "application/form-data",
@@ -38,7 +50,7 @@ const ShopContextProvider = (props) => {
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     if (localStorage.getItem("auth-token")) {
-      fetch("https://n-j-fashion-backend.vercel.app/addtocart", {
+      fetch("http://localhost:4000/addtocart", {
         method: "post",
         headers: {
           Accept: "application/form-data",
@@ -55,7 +67,7 @@ const ShopContextProvider = (props) => {
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (localStorage.getItem("auth-token")) {
-      fetch("https://n-j-fashion-backend.vercel.app/removefromcart", {
+      fetch("http://localhost:4000/removefromcart", {
         method: "post",
         headers: {
           Accept: "application/form-data",

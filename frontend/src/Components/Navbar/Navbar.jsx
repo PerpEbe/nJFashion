@@ -21,8 +21,8 @@ export const Navbar = () => {
       <div className="nav-logo">
         <Link to="/">
           <img src={logo} alt="logo" />
+        <p style={{ textDecoration: 'none' }}>nJFashion</p>
         </Link>
-        <p>nJFashion</p>
       </div>
       <img
         onClick={dropdown_toggle}

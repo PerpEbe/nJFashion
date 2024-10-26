@@ -3,63 +3,82 @@
 import React, { useState } from "react";
 import "./AddProduct.css";
 import upload_area from "../../assets/upload_area.svg";
-import { storage } from "../../firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+import { storage } from "../../../../backend/firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+// import { v4 } from "uuid";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../../../backend/firebase";
 
 const AddProduct = () => {
-  const [image, setImageUpload] = useState(null);
+  const [image]=useState(null)
   const [productDetails, setProductDetails] = useState({
     name: "",
-    image: "",
     category: "women",
+    description: "",
+    tag: "",
     new_price: "",
     old_price: "",
-    tag: "",
-    description: "",
+    image: "",
   });
 
   const changeHandler = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (e) => {
+    setProductDetails({ ...productDetails, image: e.target.files[0] });
+  };
+
   const Add_Product = async () => {
-    if (Add_Product == null) return;
+    // if (!productDetails.name || !productDetails.old_price) {
+    //   alert("Please fill in all the details");
+    //   return;
+    // }
 
-    const storageRef = ref(storage, `images/${image.name + v4()}`); // Create a reference with image name
-    // try {
-    const uploadTask = await uploadBytes(storageRef, image);
-    const image_url = await getDownloadURL(uploadTask.ref);
-    // console.log("Image URL: ",image_url);
+    // const storageRef = ref(storage, `images/${image.name + v4()}`); // Create a reference with image name
+    const storageRef = ref(
+      storage,
+      `images/${Date.now()}${productDetails.image.name}`
+    ); // Create a reference with image name
+    const uploadImage = uploadBytesResumable(storageRef, productDetails.image);
 
-    if (image_url) {
-      const productData = {
-        ...productDetails, // Include existing product details
-        image: image_url,
-      };
-      try {
-        const resonse2 = await fetch(
-          "https://n-j-fashion-backend.vercel.app/addproduct",
-          {
-            method: "post",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(productData),
-          }
-        );
-        const data = await resonse2.json();
-
-        if (data.success) {
-          alert("Product Added");
-        } else {
-          alert("Failed to add Product");
-        }
-      } catch (error) {
+    uploadImage.on(
+      "state_changed",
+      null, // Skip the progress handler
+      (error) => {
         console.log(error);
+      },
+      async () => {
+        // Clear product details after successful upload
+        setProductDetails({
+          name: "",
+          category: "women",
+          description: "",
+          tag: "",
+          new_price: "",
+          old_price: "",
+          image: "",
+        });
+    
+        // Get the download URL and save the product details in the database
+        try {
+          const url = await getDownloadURL(uploadImage.snapshot.ref);
+          const productRef = collection(db, "Products");
+          await addDoc(productRef, {
+            name: productDetails.name,
+            category: productDetails.category,
+            description: productDetails.description,
+            tag: productDetails.tag,
+            new_price: productDetails.new_price,
+            old_price: productDetails.old_price,
+            image: url,
+            // created_at: new Date(),
+          });
+        } catch (uploadError) {
+          console.error("Error saving product:", uploadError);
+        }
       }
-    }
+    );    
   };
 
   return (
@@ -143,12 +162,13 @@ const AddProduct = () => {
         </label>
         <input
           // onChange={imageHandler()}
-          onChange={(event) => {
-            setImageUpload(event.target.files[0]);
+          onChange={(e) => {
+            handleImageChange(e);
           }}
           type="file"
           name="image"
           id="file-input"
+          accept="image/*"
           hidden
         />
       </div>
@@ -165,3 +185,33 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+//   if (image) {
+//     const productData = {
+//       ...productDetails, // Include existing product details
+//       image: image_url,
+//     };
+//     try {
+//       const resonse2 = await fetch(
+//         "http://localhost:4000/addproduct",
+//         {
+//           method: "post",
+//           headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify(productData),
+//         }
+//       );
+//       const data = await resonse2.json();
+
+//       if (data.success) {
+//         alert("Product Added");
+//       } else {
+//         alert("Failed to add Product");
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// };

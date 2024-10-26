@@ -1,13 +1,20 @@
 const port = 4000;
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose"); //using this we can use the mongo database
+// const mongoose = require("mongoose"); //using this we can use the mongo database
 const jwt = require("jsonwebtoken"); //we can generate token and uverify the token
 const multer = require("multer"); //we can create image storage system
 const path = require("path");
 const cors = require("cors"); //provide access to react project
+const admin=require('firebase-admin');
+const serviceAccount=require('./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json');
 
-const { initializeApp } = require("firebase/app");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   storageBucket: '2be3ee19b163c331aefa879b7e4792f93ca4b418.appspot.com'
+// });
+
+// const { initializeApp } = require("firebase/app");
 const {
   getStorage,
   ref,
@@ -20,9 +27,9 @@ app.use(express.json()); //pass whatever request in json format
 app.use(cors()); //get access to react frontend and connecting it with the backend
 
 //Database Connection with MongoDB
-const connectionString =
-  "mongodb+srv://ewasilwa19:1e1jWtnpGVje0sJW@products.hhzkk.mongodb.net/?retryWrites=true&w=majority&appName=products";
-mongoose.connect(connectionString);
+// const connectionString =
+//   "mongodb+srv://ewasilwa19:1e1jWtnpGVje0sJW@products.hhzkk.mongodb.net/?retryWrites=true&w=majority&appName=products";
+// mongoose.connect(connectionString);
 
 //API Creation
 app.get("/", (req, res) => {
@@ -61,7 +68,7 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 
     res.json({
       success: 1,
-      image_url: imageURL,
+      image: imageURL,
     });
   } catch (error) {
     console.log(error);
@@ -70,50 +77,50 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 
 //Schema for creating products
 
-const Product = mongoose.model("Product", {
-  id: {
-    type: Number,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  new_price: {
-    type: Number,
-    required: true,
-  },
-  old_price: {
-    type: Number,
-    required: true,
-  },
+// const Product = mongoose.model("Product", {
+//   id: {
+//     type: Number,
+//     required: true,
+//   },
+//   name: {
+//     type: String,
+//     required: true,
+//   },
+//   image: {
+//     type: String,
+//     required: true,
+//   },
+//   category: {
+//     type: String,
+//     required: true,
+//   },
+//   new_price: {
+//     type: Number,
+//     required: true,
+//   },
+//   old_price: {
+//     type: Number,
+//     required: true,
+//   },
 
-  tag: {
-    type: String,
-    required: true,
-  },
+//   tag: {
+//     type: String,
+//     required: true,
+//   },
 
-  description: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-  available: {
-    type: Boolean,
-    default: true,
-  },
-});
+//   description: {
+//     type: String,
+//     required: true,
+//   },
+//   date: {
+//     type: Date,
+//     default: Date.now,
+//   },
+//   available: {
+//     type: Boolean,
+//     default: true,
+//   },
+// });
 
 //Add product API
 app.post("/addproduct", async (req, res) => {
@@ -171,23 +178,16 @@ app.post("/addproduct", async (req, res) => {
 
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
-  const { id, imageUrl } = req.body;
-
-  // Delete the image
-  try {
-    await deleteImage(imageUrl);
-
-    const product = await Product.findOneAndDelete({ id: req.body.id });
+  
+  
+    // Delete the product from the database
+    const product = await Product.findByIdAndDelete(id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // const imageRef = ref(storage, product.image_url);
-
-    res.json({ success: true, name: product.name });
-  } catch (error) {
-    console.log(error);
-  }
+    // res.json({ success: true, name: product.name });
+  
 
   console.log("Product deleted successfully");
   res.json({
@@ -204,24 +204,24 @@ app.get("/allproducts", async (req, res) => {
 });
 
 //Schema creating for User model
-const Users = mongoose.model("Users", {
-  name: {
-    type: String,
-  },
-  email: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  cartData: {
-    type: Object,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+// const Users = mongoose.model("Users", {
+//   name: {
+//     type: String,
+//   },
+//   email: {
+//     type: String,
+//   },
+//   password: {
+//     type: String,
+//   },
+//   cartData: {
+//     type: Object,
+//   },
+//   date: {
+//     type: Date,
+//     default: Date.now,
+//   },
+// });
 
 //Creating Endpoint for Registering a User
 app.post("/signup", async (req, res) => {

@@ -2,12 +2,24 @@ import React, { useEffect, useState } from "react";
 import "./Popular.css";
 // import data_product from '../Assets/data';
 import Item from "../Item/Item";
+import { db } from "../../firebase";
+import { onSnapshot, collection, query } from "firebase/firestore";
 
 const Popular = () => {
   const [popularProducts, setPopularProducts] = useState([]);
 
   useEffect(() => {
-    fetch("https://n-j-fashion-backend.vercel.app/popularinwomen")
+    const popularRef=collection(db,"Products")
+    const q=query(popularRef)
+    onSnapshot(q,(snapshot)=>{
+      const popularProducts=snapshot.docs.map((doc)=>({
+        id:doc.id,
+        ...doc.data(),
+      }));
+      setPopularProducts(popularProducts)
+    })
+
+    fetch("http://localhost:4000/popularinwomen")
       .then((response) => response.json())
       .then((data) => setPopularProducts(data));
   }, []);
