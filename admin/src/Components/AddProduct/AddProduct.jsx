@@ -21,6 +21,9 @@ const AddProduct = () => {
     image: "",
   });
 
+  // const imageHandler = (e) => {
+  //   setImage(e.target.files[0]);
+  // };
   const changeHandler = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
@@ -42,10 +45,35 @@ const AddProduct = () => {
     ); // Create a reference with image name
     const uploadImage = uploadBytesResumable(storageRef, productDetails.image);
 
+<<<<<<< HEAD
     uploadImage.on(
       "state_changed",
       null, // Skip the progress handler
       (error) => {
+=======
+    if (image_url) {
+      const productData = {
+        ...productDetails, // Include existing product details
+        image: image_url,
+      };
+      try {
+        const resonse2 = await fetch("https://n-j-fashion-backend.vercel.app/addproduct", {
+          method: "post",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(productData),
+        });
+        const data = await resonse2.json();
+
+        if (data.success) {
+          alert("Product Added");
+        } else {
+          alert("Failed to add Product");
+        }
+      } catch (error) {
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
         console.log(error);
       },
       async () => {
@@ -114,30 +142,30 @@ const AddProduct = () => {
             placeholder="Type Here"
           />
         </div>
-      </div>
-      <div className="addproduct-itemfield">
-        <p>Tag</p>
-        <input
-          value={productDetails.tag}
-          onChange={changeHandler}
-          type="text"
-          name="tag"
-          placeholder="Type Here"
-        />
-      </div>
-      <div className="addproduct-itemfield">
-        <p>Description</p>
-        <textarea
-          rows={4}
-          cols={70}
-          maxLength={200}
-          value={productDetails.description}
-          onChange={changeHandler}
-          type="textarea"
-          name="description"
-          placeholder="Type Here"
-        ></textarea>
-      </div>
+        </div>
+        <div className="addproduct-itemfield">
+          <p>Tag</p>
+          <input
+            value={productDetails.tag}
+            onChange={changeHandler}
+            type="text"
+            name="tag"
+            placeholder="Type Here"
+          />
+        </div>
+        <div className="addproduct-itemfield">
+          <p>Description</p>
+          <textarea
+            rows={4}
+            cols={70}
+            maxLength={200}
+            value={productDetails.description}
+            onChange={changeHandler}
+            type="textarea"
+            name="description"
+            placeholder="Type Here">
+          </textarea>
+        </div>
       <div className="addproduct-itemfield">
         <p>Product Category</p>
         <select

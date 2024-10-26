@@ -24,7 +24,30 @@ const {
 } = require("firebase/storage");
 
 app.use(express.json()); //pass whatever request in json format
-app.use(cors()); //get access to react frontend and connecting it with the backend
+
+// Specify multiple origins
+const allowedOrigins = [
+  'https://n-j-fashion-admin.vercel.app', 
+  'https://n-j-fashion-frontend.vercel.app'  // Add other frontend origins here
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // If the origin is in the allowed list or it's undefined (e.g., for non-browser requests), allow it
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],  // Specify the allowed methods
+}));
+
+app.options("/removeproduct", (req, res) => {
+  res.header("Access-Control-Allow-Methods", "DELETE", "POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  return res.sendStatus(200);
+});
 
 //Database Connection with MongoDB
 // const connectionString =
@@ -34,25 +57,9 @@ app.use(cors()); //get access to react frontend and connecting it with the backe
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5713"); // Replace with your frontend's origin
+  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-backend.vercel.app"); // Replace with your frontend's origin
   res.json(data);
 });
-
-//Image Storage Engine
-// const storage = multer.diskStorage({
-//   destination: path.join(__dirname, "/upload/images"),
-//   filename: (req, file, cb) => {
-//     return cb(
-//       null,
-//       `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
-//     );
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-// //Creating Upload Endpoint for images
-
-// app.use("/images", express.static(path.join(__dirname, "upload/images")));
 
 app.post("/upload", multer().single("image"), async (req, res) => {
   if (!req.file) {
@@ -157,29 +164,28 @@ app.post("/addproduct", async (req, res) => {
   });
 });
 
-// Create the backend route for fetching product details
-// app.get("/product/:id", async (req, res) => {
-//   try {
-//     const productId = req.params.id;
-//     const product = await Product.findById(productId);
-
-//     if (!product) {
-//       return res.status(404).json({
-//         message: "Product not found",
-//       });
-//     }
-
-//     res.json(product);
-//   } catch (error) {
-//     console.error("Error fetching product:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
+<<<<<<< HEAD
   
   
+=======
+  const { id,image_url } = req.body;
+
+  // const imageURL = ref(storage, product.image_url);
+  
+  try {
+    const storage = getStorage();
+
+    // Get a reference to the image
+    const storageRef = admin.storage().refFromURL(image_url);
+    console.log(storageRef);
+
+    // Delete the image
+    await storageRef.delete();
+    res.json({ message: "Image deleted successfully" });
+
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
     // Delete the product from the database
     const product = await Product.findByIdAndDelete(id);
     if (!product) {
@@ -187,7 +193,13 @@ app.post("/removeproduct", async (req, res) => {
     }
 
     // res.json({ success: true, name: product.name });
+<<<<<<< HEAD
   
+=======
+  } catch (error) {
+    console.log(error);
+  }
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
 
   console.log("Product deleted successfully");
   res.json({

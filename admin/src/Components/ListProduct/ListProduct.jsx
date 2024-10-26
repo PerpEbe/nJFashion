@@ -3,15 +3,18 @@ import React from "react";
 import "./ListProduct.css";
 import { useState, useEffect } from "react";
 import cross_icon from "../../assets/cross_icon.png";
+<<<<<<< HEAD
 import { doc,deleteDoc,onSnapshot, collection, query } from "firebase/firestore";
 import { db,storage } from "../../firebase.js";
 import {ref,deleteObject} from "firebase/storage"
+=======
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
 
   const fetchInfo = async () => {
-    await fetch("http://localhost:4000/allproducts")
+    await fetch("https://n-j-fashion-backend.vercel.app/allproducts")
       .then((resp) => resp.json())
       .then((data) => {
         setAllProducts(data);
@@ -33,6 +36,7 @@ const ListProduct = () => {
     fetchInfo();
   }, []);
 
+<<<<<<< HEAD
   const remove_product = async (id, image) => {
     try {
       await deleteDoc(doc(db,"Products",id))
@@ -43,12 +47,20 @@ const ListProduct = () => {
       
     }
     await fetch("http://localhost:4000/removeproduct", {
+=======
+  const remove_product = async (id, image_url) => {
+    await fetch("https://n-j-fashion-backend.vercel.app/removeproduct", {
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
+<<<<<<< HEAD
       body: JSON.stringify({ id: id, image: image }),
+=======
+      body: JSON.stringify({ id: id, image_url: image_url }),
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
     });
 
     await fetchInfo();
@@ -67,7 +79,10 @@ const ListProduct = () => {
       </div>
       <div className="listproduct-allproducts">
         <hr />
+<<<<<<< HEAD
         {/* {allproducts.map((product) => { */}
+=======
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
         {allproducts.map((product) => {
           return (
             <React.Fragment key={product.id}>
@@ -85,7 +100,11 @@ const ListProduct = () => {
                 <p>${product.new_price}</p>
                 <p>{product.category}</p>
                 <img
+<<<<<<< HEAD
                   onClick={() => remove_product(product.id, product.image)} // Correct event handler
+=======
+                  onClick={() => remove_product(product.id, product.image_url)} // Correct event handler
+>>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
                   src={cross_icon}
                   alt=""
                   className="listproduct-remove-icon"
