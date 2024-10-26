@@ -34,8 +34,7 @@ const AddProduct = () => {
     //   alert("Please fill in all the details");
     //   return;
     // }
-
-    // const storageRef = ref(storage, `images/${image.name + v4()}`); // Create a reference with image name
+    
     const storageRef = ref(
       storage,
       `images/${Date.now()}${productDetails.image.name}`

@@ -32,16 +32,10 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // If the origin is in the allowed list or it's undefined (e.g., for non-browser requests), allow it
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'DELETE', 'PUT'],  // Specify the allowed methods
+  origin: '*'
 }));
+
+
 
 app.options("/removeproduct", (req, res) => {
   res.header("Access-Control-Allow-Methods", "DELETE", "POST, OPTIONS");
