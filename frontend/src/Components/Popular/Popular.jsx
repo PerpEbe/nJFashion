@@ -19,7 +19,7 @@ const Popular = () => {
       setPopularProducts(popularProducts)
     })
 
-    fetch("http://localhost:4000/popularinwomen")
+    fetch("https://n-j-fashion-frontend.vercel.app/popularinwomen")
       .then((response) => response.json())
       .then((data) => setPopularProducts(data));
   }, []);

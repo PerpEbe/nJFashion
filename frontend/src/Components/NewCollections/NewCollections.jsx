@@ -21,7 +21,7 @@ const NewCollections = () => {
       console.log(new_collection);
     });
 
-    fetch("http://localhost:4000/newcollections")
+    fetch("https://n-j-fashion-frontend.vercel.app/newcollections")
       .then((response) => response.json())
       .then((data) => setNew_collection(data));
   }, []);

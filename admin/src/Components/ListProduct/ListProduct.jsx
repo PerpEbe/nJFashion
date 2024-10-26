@@ -42,7 +42,7 @@ const ListProduct = () => {
       console.log(error);
       
     }
-    await fetch("http://localhost:4000/removeproduct", {
+    await fetch("https://n-j-fashion-frontend.vercel.app/removeproduct", {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -27,12 +27,12 @@ const ShopContextProvider = (props) => {
       setAll_Product(all_product);
     });
 
-    fetch("http://localhost:4000/allproducts")
+    fetch("https://n-j-fashion-frontend.vercel.app/allproducts")
       .then((response) => response.json())
       .then((data) => setAll_Product(data));
 
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/getcart", {
+      fetch("https://n-j-fashion-frontend.vercel.app/getcart", {
         method: "post",
         headers: {
           Accept: "application/form-data",
@@ -50,7 +50,7 @@ const ShopContextProvider = (props) => {
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/addtocart", {
+      fetch("https://n-j-fashion-frontend.vercel.app/addtocart", {
         method: "post",
         headers: {
           Accept: "application/form-data",
@@ -67,7 +67,7 @@ const ShopContextProvider = (props) => {
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/removefromcart", {
+      fetch("https://n-j-fashion-frontend.vercel.app/removefromcart", {
         method: "post",
         headers: {
           Accept: "application/form-data",
