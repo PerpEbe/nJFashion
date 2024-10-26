@@ -3,12 +3,9 @@ import React from "react";
 import "./ListProduct.css";
 import { useState, useEffect } from "react";
 import cross_icon from "../../assets/cross_icon.png";
-<<<<<<< HEAD
 import { doc,deleteDoc,onSnapshot, collection, query } from "firebase/firestore";
 import { db,storage } from "../../firebase.js";
 import {ref,deleteObject} from "firebase/storage"
-=======
->>>>>>> 922a5dc7200ed30ca717e91f69c07f2387d5e72c
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
