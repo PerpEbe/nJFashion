@@ -46,20 +46,16 @@ const ListProduct = () => {
       await deleteDoc(doc(db, "Products", id));
       const storageRef = ref(storage, image);
       await deleteObject(storageRef);
+      
+       // Scroll to the top of the page after successful product addition
+       window.scrollTo({ top: 0, behavior: "smooth" });
+       document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+       document.body.scrollTop = 0; // For Safari
+       
       toast.error("Product Deleted!");
     } catch (error) {
       console.log(error);
     }
-    // await fetch("http://localhost:4000/removeproduct", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ id: id, image: image }),
-    // });
-
-    // await fetchInfo();
   };
 
   return (

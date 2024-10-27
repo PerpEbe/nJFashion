@@ -74,12 +74,15 @@ const AddProduct = () => {
             new_price: productDetails.new_price,
             old_price: productDetails.old_price,
             image: url,
-            // created_at: new Date(),
           });
-          toast.success("Product added successfully");
           
+          // Scroll to the top of the page after successful product addition
+          window.scrollTo({ top: 0, behavior: "smooth" });
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           document.body.scrollTop = 0; // For Safari
+          
+          toast.success("Product added successfully");
+
         } catch (uploadError) {
           // console.error("Error saving product:", uploadError);
         }
