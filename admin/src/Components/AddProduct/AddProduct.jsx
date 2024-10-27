@@ -8,9 +8,11 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 // import { v4 } from "uuid";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../firebase.js";
+import {ToastContainer,toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddProduct = () => {
-  const [image] = useState(null);
+  const [image,setImage] = useState(null);
   const [productDetails, setProductDetails] = useState({
     name: "",
     category: "women",
@@ -26,6 +28,7 @@ const AddProduct = () => {
   };
 
   const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
     setProductDetails({ ...productDetails, image: e.target.files[0] });
   };
 
@@ -73,7 +76,7 @@ const AddProduct = () => {
             image: url,
             // created_at: new Date(),
           });
-          alert("Product Added");
+          toast.success("Product added successfully");
         } catch (uploadError) {
           console.error("Error saving product:", uploadError);
         }
@@ -180,6 +183,7 @@ const AddProduct = () => {
       >
         ADD
       </button>
+      <ToastContainer />
     </div>
   );
 };

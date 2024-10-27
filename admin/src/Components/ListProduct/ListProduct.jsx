@@ -12,6 +12,8 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../../firebase.js";
 import { ref, deleteObject } from "firebase/storage";
+import { ToastContainer,toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
@@ -44,7 +46,7 @@ const ListProduct = () => {
       await deleteDoc(doc(db, "Products", id));
       const storageRef = ref(storage, image);
       await deleteObject(storageRef);
-      alert("Product Deleted");
+      toast.error("Product Deleted!");
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +64,7 @@ const ListProduct = () => {
 
   return (
     <div className="list-product">
-      <h1>All Products List</h1>
+      <h1>All Products</h1>
       <div className="listproduct-format-main">
         <p>Products</p>
         <p>Title</p>
@@ -102,6 +104,7 @@ const ListProduct = () => {
           );
         })}
       </div>
+      <ToastContainer />
     </div>
   );
 };
