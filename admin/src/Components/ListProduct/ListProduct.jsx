@@ -17,7 +17,7 @@ const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
 
   // const fetchInfo = async () => {
-  //   await fetch("http://localhost:4000/allproducts")
+  //   await fetch("https://n-j-fashion-backend.vercel.app/allproducts")
   //     .then((resp) => resp.json())
   //     .then((data) => {
   //       setAllProducts(data);
@@ -48,7 +48,7 @@ const ListProduct = () => {
     } catch (error) {
       console.log(error);
     }
-    await fetch("http://localhost:4000/removeproduct", {
+    await fetch("https://n-j-fashion-backend.vercel.app/removeproduct", {
       method: "POST",
       headers: {
         Accept: "application/json",

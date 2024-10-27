@@ -29,7 +29,7 @@ app.use(express.json()); //pass whatever request in json format
 // Specify multiple origins
 const allowedOrigins = [
   "https://n-j-fashion-admin.vercel.app",
-  "http://localhost:4000", // Add other frontend origins here
+  "https://n-j-fashion-backend.vercel.app", // Add other frontend origins here
 ];
 
 app.use(
@@ -52,7 +52,7 @@ app.options("/removeproduct", (req, res) => {
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4000"); // Replace with your frontend's origin
+  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-backend.vercel.app"); // Replace with your frontend's origin
   res.json(data);
 });
 
