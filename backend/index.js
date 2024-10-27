@@ -125,46 +125,43 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 // });
 
 //Add product API
-app.post("/addproduct", async (req, res) => {
-  // let products = await Product.find({});
-  let id;
-  if (products.length > 0) {
-    let last_product_array = products.slice(-1);
-    let last_product = last_product_array[0];
-    id = last_product.id + 1;
-  } else {
-    id = 1; // For the first product in the database, id will be 1.  For subsequent products, it will be incremented by 1 from the last product's id.  This ensures the id is always unique and in ascending order.  The default value for available is true.  If a product is not available, it can be set to false.  This will help in tracking the availability of products.  For example, a product with id 1 might be out of stock, and thus available would be set to false.  In this case, it would not be displayed in the frontend.  The user can still add this product to their cart, but it would not be available for purchase.  This design allows for easy management of products and their availability.  This design also allows for easy addition of new products to the database in the future without having to change the id of existing products.  This design also allows for easy updating of product details,
-  }
+// app.post("/addproduct", async (req, res) => {
+//   // let products = await Product.find({});
+//   // let id;
+//   // if (products.length > 0) {
+//   //   let last_product_array = products.slice(-1);
+//   //   let last_product = last_product_array[0];
+//   //   id = last_product.id + 1;
+//   // } else {
+//   //   id = 1; // For the first product in the database, id will be 1.  For subsequent products, it will be incremented by 1 from the last product's id.  This ensures the id is always unique and in ascending order.  The default value for available is true.  If a product is not available, it can be set to false.  This will help in tracking the availability of products.  For example, a product with id 1 might be out of stock, and thus available would be set to false.  In this case, it would not be displayed in the frontend.  The user can still add this product to their cart, but it would not be available for purchase.  This design allows for easy management of products and their availability.  This design also allows for easy addition of new products to the database in the future without having to change the id of existing products.  This design also allows for easy updating of product details,
+//   // }
 
-  const productData = req.body;
-  const imageURL = productData.image;
+//   const productData = req.body;
+//   const imageURL = productData.image;
 
-  // const product = new Product({
-  //   id: id,
-  //   name: req.body.name,
-  //   image: req.body.image,
-  //   category: req.body.category,
-  //   new_price: req.body.new_price,
-  //   old_price: req.body.old_price,
-  //   tag: req.body.tag,
-  //   description: req.body.description,
-  // });
-  console.log(product);
-  await product.save();
-  console.log("Saved Successfully");
-  res.json({
-    success: true,
-    message: "Product added successfully",
-    name: req.body.name,
-  });
-});
+//   // const product = new Product({
+//   //   id: id,
+//   //   name: req.body.name,
+//   //   image: req.body.image,
+//   //   category: req.body.category,
+//   //   new_price: req.body.new_price,
+//   //   old_price: req.body.old_price,
+//   //   tag: req.body.tag,
+//   //   description: req.body.description,
+//   // });
+//   console.log(product);
+//   await product.save();
+//   console.log("Saved Successfully");
+//   res.json({
+//     success: true,
+//     message: "Product added successfully",
+//     name: req.body.name,
+//   });
+// });
 
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
   // Delete the product from the database
-  if (!product) {
-    return res.status(404).json({ message: "Product not found" });
-  }
 
   // res.json({ success: true, name: product.name });
 
@@ -281,7 +278,7 @@ app.get("/popularinwomen", async (req, res) => {
     }));
 
     // Get the top 4 products
-    const popular_in_women = products.slice(0, 4);
+    // const popular_in_women = products.slice(0, 4);
 
     console.log("Popular in women fetched");
     res.send(popular_in_women);
