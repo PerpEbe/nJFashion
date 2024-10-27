@@ -7,7 +7,7 @@ import { storage } from "../../firebase.js";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 // import { v4 } from "uuid";
 import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../../../backend/firebase";
+import { db } from "../../firebase.js";
 
 const AddProduct = () => {
   const [image] = useState(null);
@@ -37,7 +37,7 @@ const AddProduct = () => {
 
     const storageRef = ref(
       storage,
-      `images/${Date.now()}${productDetails.image}`
+      `images/${Date.now()}${productDetails.image.name}`
     ); // Create a reference with image name
     const uploadImage = uploadBytesResumable(storageRef, productDetails.image);
 
