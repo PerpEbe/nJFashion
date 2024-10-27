@@ -37,7 +37,7 @@ const AddProduct = () => {
 
     const storageRef = ref(
       storage,
-      `images/${Date.now()}${productDetails.image.name}`
+      `images/${Date.now()}${productDetails.image}`
     ); // Create a reference with image name
     const uploadImage = uploadBytesResumable(storageRef, productDetails.image);
 
