@@ -77,6 +77,7 @@ const AddProduct = () => {
             // created_at: new Date(),
           });
           toast.success("Product added successfully");
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (uploadError) {
           console.error("Error saving product:", uploadError);
         }
