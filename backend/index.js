@@ -29,7 +29,7 @@ app.use(express.json()); //pass whatever request in json format
 // Specify multiple origins
 const allowedOrigins = [
   "https://n-j-fashion-admin.vercel.app",
-  "https://n-j-fashion-backend.vercel.app", // Add other frontend origins here
+  "https://n-j-fashion-frontend.vercel.app", // Add other frontend origins here
 ];
 
 app.use(
@@ -52,7 +52,7 @@ app.options("/removeproduct", (req, res) => {
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
-  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-backend.vercel.app"); // Replace with your frontend's origin
+  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-frontend.vercel.app"); // Replace with your frontend's origin
   res.json(data);
 });
 
@@ -160,24 +160,24 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 // });
 
 //Creating API For deleting a product
-app.post("/removeproduct", async (req, res) => {
-  // Delete the product from the database
+// app.post("/removeproduct", async (req, res) => {
+//   // Delete the product from the database
 
-  // res.json({ success: true, name: product.name });
+//   // res.json({ success: true, name: product.name });
 
-  console.log("Product deleted successfully");
-  res.json({
-    success: true,
-    name: req.body.name,
-  });
-});
+//   console.log("Product deleted successfully");
+//   res.json({
+//     success: true,
+//     name: req.body.name,
+//   });
+// });
 
 //Creating API for getting all products
-app.get("/allproducts", async (req, res) => {
+// app.get("/allproducts", async (req, res) => {
   // let products = await Product.find({});
   // console.log("All Products Fetched");
   // res.send(products);
-});
+// });
 
 //Schema creating for User model
 // const Users = mongoose.model("Users", {
@@ -251,12 +251,12 @@ app.post("/login", async (req, res) => {
 });
 
 //Creating endpoint for newscollection data
-app.get("/newcollections", async (req, res) => {
-  // let products = await Product.find({});
-  // let newcollection = products.slice(1).slice(-8);
-  console.log("News Collection Fetched");
-  // res.send(newcollection);
-});
+// app.get("/newcollections", async (req, res) => {
+//   // let products = await Product.find({});
+//   // let newcollection = products.slice(1).slice(-8);
+//   console.log("News Collection Fetched");
+//   // res.send(newcollection);
+// });
 
 //Creating endoint for popular in women section
 app.get("/popularinwomen", async (req, res) => {

@@ -48,14 +48,14 @@ const ListProduct = () => {
     } catch (error) {
       console.log(error);
     }
-    await fetch("https://n-j-fashion-backend.vercel.app/removeproduct", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: id, image: image }),
-    });
+    // await fetch("https://n-j-fashion-backend.vercel.app/removeproduct", {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ id: id, image: image }),
+    // });
 
     // await fetchInfo();
   };
