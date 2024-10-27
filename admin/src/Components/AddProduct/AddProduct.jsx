@@ -79,7 +79,7 @@ const AddProduct = () => {
           toast.success("Product added successfully");
           window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (uploadError) {
-          console.error("Error saving product:", uploadError);
+          // console.error("Error saving product:", uploadError);
         }
       }
     );
