@@ -3,14 +3,14 @@
 import React, { useState } from "react";
 import "./AddProduct.css";
 import upload_area from "../../assets/upload_area.svg";
-import { storage } from "../../../../backend/firebase";
+import { storage } from "../../firebase.js";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 // import { v4 } from "uuid";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../../backend/firebase";
 
 const AddProduct = () => {
-  const [image]=useState(null)
+  const [image] = useState(null);
   const [productDetails, setProductDetails] = useState({
     name: "",
     category: "women",
@@ -34,7 +34,7 @@ const AddProduct = () => {
     //   alert("Please fill in all the details");
     //   return;
     // }
-    
+
     const storageRef = ref(
       storage,
       `images/${Date.now()}${productDetails.image.name}`
@@ -58,7 +58,7 @@ const AddProduct = () => {
           old_price: "",
           image: "",
         });
-    
+
         // Get the download URL and save the product details in the database
         try {
           const url = await getDownloadURL(uploadImage.snapshot.ref);
@@ -73,11 +73,12 @@ const AddProduct = () => {
             image: url,
             // created_at: new Date(),
           });
+          alert("Product Added");
         } catch (uploadError) {
           console.error("Error saving product:", uploadError);
         }
       }
-    );    
+    );
   };
 
   return (
@@ -192,7 +193,7 @@ export default AddProduct;
 //     };
 //     try {
 //       const resonse2 = await fetch(
-//         "https://n-j-fashion-frontend.vercel.app/addproduct",
+//         "http://localhost:4000/addproduct",
 //         {
 //           method: "post",
 //           headers: {

@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken"); //we can generate token and uverify the tok
 const multer = require("multer"); //we can create image storage system
 const path = require("path");
 const cors = require("cors"); //provide access to react project
-const admin=require('firebase-admin');
-const serviceAccount=require('./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json');
+const admin = require("firebase-admin");
+const serviceAccount = require("./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json");
 
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
@@ -20,22 +20,23 @@ const {
   ref,
   uploadBytes,
   getDownloadURL,
-  imageRef,
 } = require("firebase/storage");
+const {collection }=require("firebase/firestore");
+const { db } = require("./firebase.js");
 
 app.use(express.json()); //pass whatever request in json format
 
 // Specify multiple origins
 const allowedOrigins = [
-  'https://n-j-fashion-admin.vercel.app', 
-  'https://n-j-fashion-frontend.vercel.app'  // Add other frontend origins here
+  "https://n-j-fashion-admin.vercel.app",
+  "http://localhost:4000", // Add other frontend origins here
 ];
 
-app.use(cors({
-  origin: '*'
-}));
-
-
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.options("/removeproduct", (req, res) => {
   res.header("Access-Control-Allow-Methods", "DELETE", "POST, OPTIONS");
@@ -51,7 +52,7 @@ app.options("/removeproduct", (req, res) => {
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
-  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-backend.vercel.app"); // Replace with your frontend's origin
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4000"); // Replace with your frontend's origin
   res.json(data);
 });
 
@@ -125,7 +126,7 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 
 //Add product API
 app.post("/addproduct", async (req, res) => {
-  let products = await Product.find({});
+  // let products = await Product.find({});
   let id;
   if (products.length > 0) {
     let last_product_array = products.slice(-1);
@@ -138,16 +139,16 @@ app.post("/addproduct", async (req, res) => {
   const productData = req.body;
   const imageURL = productData.image;
 
-  const product = new Product({
-    id: id,
-    name: req.body.name,
-    image: req.body.image,
-    category: req.body.category,
-    new_price: req.body.new_price,
-    old_price: req.body.old_price,
-    tag: req.body.tag,
-    description: req.body.description,
-  });
+  // const product = new Product({
+  //   id: id,
+  //   name: req.body.name,
+  //   image: req.body.image,
+  //   category: req.body.category,
+  //   new_price: req.body.new_price,
+  //   old_price: req.body.old_price,
+  //   tag: req.body.tag,
+  //   description: req.body.description,
+  // });
   console.log(product);
   await product.save();
   console.log("Saved Successfully");
@@ -160,16 +161,12 @@ app.post("/addproduct", async (req, res) => {
 
 //Creating API For deleting a product
 app.post("/removeproduct", async (req, res) => {
-  
-  
-    // Delete the product from the database
-    const product = await Product.findByIdAndDelete(id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+  // Delete the product from the database
+  if (!product) {
+    return res.status(404).json({ message: "Product not found" });
+  }
 
-    // res.json({ success: true, name: product.name });
-  
+  // res.json({ success: true, name: product.name });
 
   console.log("Product deleted successfully");
   res.json({
@@ -180,9 +177,9 @@ app.post("/removeproduct", async (req, res) => {
 
 //Creating API for getting all products
 app.get("/allproducts", async (req, res) => {
-  let products = await Product.find({});
-  console.log("All Products Fetched");
-  res.send(products);
+  // let products = await Product.find({});
+  // console.log("All Products Fetched");
+  // res.send(products);
 });
 
 //Schema creating for User model
@@ -258,19 +255,47 @@ app.post("/login", async (req, res) => {
 
 //Creating endpoint for newscollection data
 app.get("/newcollections", async (req, res) => {
-  let products = await Product.find({});
-  let newcollection = products.slice(1).slice(-8);
+  // let products = await Product.find({});
+  // let newcollection = products.slice(1).slice(-8);
   console.log("News Collection Fetched");
-  res.send(newcollection);
+  // res.send(newcollection);
 });
 
 //Creating endoint for popular in women section
 app.get("/popularinwomen", async (req, res) => {
-  let products = await Product.find({ category: "women" });
-  let popular_in_women = products.slice(0, 4);
-  console.log("Popular in women fetched");
-  res.send(popular_in_women);
+  try {
+    const snapshot = await db
+      .collection("Products")
+      .where("category", "==", "women")
+      .get();
+
+    if (snapshot.empty) {
+      return res
+        .status(404)
+        .json({ message: "No products found in women category" });
+    }
+    // Extract the product data from the snapshot
+    const products = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Get the top 4 products
+    const popular_in_women = products.slice(0, 4);
+
+    console.log("Popular in women fetched");
+    res.send(popular_in_women);
+  } catch (error) {
+    console.error("Error fetching popular in women:", error);
+    res.status(500).send("Error fetching popular products.");
+  }
 });
+
+//   let products = await Product.find({ category: "women" });
+//   let popular_in_women = products.slice(0, 4);
+//   console.log("Popular in women fetched");
+//   res.send(popular_in_women);
+// });
 
 //Creating middleware to fetch user
 const fetchUser = async (req, res, next) => {

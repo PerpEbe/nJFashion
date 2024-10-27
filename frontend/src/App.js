@@ -1,16 +1,16 @@
 // import logo from './logo.svg';
 import "./App.css";
-import { Navbar } from "./Components/Navbar/Navbar";
+import { Navbar } from "./Components/Navbar/Navbar.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ShopCategory from "./Pages/ShopCategory";
-import Product from "./Pages/Product";
-import LoginSignup from "./Pages/LoginSignup";
-import Shop from "./Pages/Shop";
-import Cart from "./Pages/Cart";
+import ShopCategory from "./Pages/ShopCategory.jsx";
+import Product from "./Pages/Product.jsx";
+import LoginSignup from "./Pages/LoginSignup.jsx";
+import Shop from "./Pages/Shop.jsx";
+import Cart from "./Pages/Cart.jsx";
 import men_banner from "./Components/Assets/banner_mens.png";
 import women_banner from "./Components/Assets/banner_women.png";
 import kid_banner from "./Components/Assets/banner_kids.png";
-import Footer from "./Components/Footer/Footer";
+import Footer from "./Components/Footer/Footer.jsx";
 
 function App() {
   return (

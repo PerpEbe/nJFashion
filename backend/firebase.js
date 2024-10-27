@@ -17,15 +17,10 @@
 // const app = initializeApp(firebaseConfig);
 // export default app;
 
-
-
-
-
-
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import {getFirestore} from 'firebase/firestore'
-import {getStorage} from 'firebase/storage'
+const { initializeApp } = require("firebase/app");
+const { getFirestore } = require("firebase/firestore");
+const { getStorage } = require("firebase/storage");
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -34,11 +29,11 @@ const firebaseConfig = {
   projectId: "njfashion-cce21",
   storageBucket: "njfashion-cce21.appspot.com",
   messagingSenderId: "895472804983",
-  appId: "1:895472804983:web:99dbfa0293ead496d45272"
+  appId: "1:895472804983:web:99dbfa0293ead496d45272",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const storage=getStorage(app);
-export const db=getFirestore(app);
+const storage = getStorage(app);
+const db = getFirestore(app);

@@ -3,20 +3,26 @@ import React from "react";
 import "./ListProduct.css";
 import { useState, useEffect } from "react";
 import cross_icon from "../../assets/cross_icon.png";
-import { doc,deleteDoc,onSnapshot, collection, query } from "firebase/firestore";
-import { db,storage } from "../../firebase.js";
-import {ref,deleteObject} from "firebase/storage"
+import {
+  doc,
+  deleteDoc,
+  onSnapshot,
+  collection,
+  query,
+} from "firebase/firestore";
+import { db, storage } from "../../firebase.js";
+import { ref, deleteObject } from "firebase/storage";
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
 
-  const fetchInfo = async () => {
-    await fetch("https://n-j-fashion-backend.vercel.app/allproducts")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setAllProducts(data);
-      });
-  };
+  // const fetchInfo = async () => {
+  //   await fetch("http://localhost:4000/allproducts")
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       setAllProducts(data);
+  //     });
+  // };
 
   useEffect(() => {
     const productRef = collection(db, "Products");
@@ -30,19 +36,19 @@ const ListProduct = () => {
       setAllProducts(allproducts);
       console.log(allproducts);
     });
-    fetchInfo();
+    // fetchInfo();
   }, []);
 
   const remove_product = async (id, image) => {
     try {
-      await deleteDoc(doc(db,"Products",id))
-      const storageRef=ref(storage,image)
-      await deleteObject(storageRef)
+      await deleteDoc(doc(db, "Products", id));
+      const storageRef = ref(storage, image);
+      await deleteObject(storageRef);
+      alert("Product Deleted");
     } catch (error) {
       console.log(error);
-      
     }
-    await fetch("https://n-j-fashion-frontend.vercel.app/removeproduct", {
+    await fetch("http://localhost:4000/removeproduct", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -51,7 +57,7 @@ const ListProduct = () => {
       body: JSON.stringify({ id: id, image: image }),
     });
 
-    await fetchInfo();
+    // await fetchInfo();
   };
 
   return (

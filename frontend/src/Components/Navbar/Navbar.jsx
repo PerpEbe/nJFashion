@@ -21,7 +21,7 @@ export const Navbar = () => {
       <div className="nav-logo">
         <Link to="/">
           <img src={logo} alt="logo" />
-        <p style={{ textDecoration: 'none' }}>nJFashion</p>
+        <p style={{ textDecoration: "none" }}>nJFashion</p>
         </Link>
       </div>
       <img

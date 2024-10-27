@@ -19,9 +19,9 @@ const Popular = () => {
       setPopularProducts(popularProducts)
     })
 
-    fetch("https://n-j-fashion-frontend.vercel.app/popularinwomen")
-      .then((response) => response.json())
-      .then((data) => setPopularProducts(data));
+    // fetch("http://localhost:4000/popularinwomen")
+    //   .then((response) => response.json())
+    //   .then((data) => setPopularProducts(data));
   }, []);
 
   return (
