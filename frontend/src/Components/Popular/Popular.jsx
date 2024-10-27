@@ -3,25 +3,29 @@ import "./Popular.css";
 // import data_product from '../Assets/data';
 import Item from "../Item/Item";
 import { db } from "../../firebase";
-import { onSnapshot, collection, query } from "firebase/firestore";
+import { getDocs,where, collection, query } from "firebase/firestore";
 
 const Popular = () => {
   const [popularProducts, setPopularProducts] = useState([]);
 
   useEffect(() => {
-    const popularRef=collection(db,"Products")
-    const q=query(popularRef)
-    onSnapshot(q,(snapshot)=>{
-      const popularProducts=snapshot.docs.map((doc)=>({
-        id:doc.id,
-        ...doc.data(),
-      }));
-      setPopularProducts(popularProducts)
-    })
+    const fetchPopularProducts = async () => {
+      try {
+        const productsRef = collection(db, "Products");
+        const q = query(productsRef, where("category", "==", "women"));
+        const querySnapshot = await getDocs(q);
+        const products = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const data = products.slice(0, 4);
+        setPopularProducts(data);
+      } catch (error) {
+        console.error("Error fetching popular in women:", error);
+      }
+    };
 
-    // fetch("https://n-j-fashion-backend.vercel.app/popularinwomen")
-    //   .then((response) => response.json())
-    //   .then((data) => setPopularProducts(data));
+    fetchPopularProducts();
   }, []);
 
   return (

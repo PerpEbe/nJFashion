@@ -1,28 +1,27 @@
 const port = 4000;
-const express = require("express");
+import express  from "express";
 const app = express();
-// const mongoose = require("mongoose"); //using this we can use the mongo database
-const jwt = require("jsonwebtoken"); //we can generate token and uverify the token
-const multer = require("multer"); //we can create image storage system
-const path = require("path");
-const cors = require("cors"); //provide access to react project
-const admin = require("firebase-admin");
-const serviceAccount = require("./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json");
+// import mongoose = require("mongoose"); //using this we can use the mongo database
+import jwt from "jsonwebtoken"; //we can generate token and uverify the token
+import multer from "multer"; //we can create image storage system
+import path from "path";
+import cors from "cors"; //provide access to react project
+import admin from "firebase-admin";
+// import serviceAccount from "./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json";
 
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
 //   storageBucket: '2be3ee19b163c331aefa879b7e4792f93ca4b418.appspot.com'
 // });
 
-// const { initializeApp } = require("firebase/app");
-const {
+import {
   getStorage,
   ref,
   uploadBytes,
   getDownloadURL,
-} = require("firebase/storage");
-const {collection }=require("firebase/firestore");
-const { db } = require("./firebase.js");
+} from "firebase/storage";
+import { collection,where,query,getDocs } from "firebase/firestore";
+import { db } from "./firebase.js";
 
 app.use(express.json()); //pass whatever request in json format
 
@@ -52,7 +51,10 @@ app.options("/removeproduct", (req, res) => {
 //API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
-  res.setHeader("Access-Control-Allow-Origin", "https://n-j-fashion-frontend.vercel.app"); // Replace with your frontend's origin
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://n-j-fashion-frontend.vercel.app"
+  ); // Replace with your frontend's origin
   res.json(data);
 });
 
@@ -174,9 +176,9 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 
 //Creating API for getting all products
 // app.get("/allproducts", async (req, res) => {
-  // let products = await Product.find({});
-  // console.log("All Products Fetched");
-  // res.send(products);
+// let products = await Product.find({});
+// console.log("All Products Fetched");
+// res.send(products);
 // });
 
 //Schema creating for User model
@@ -259,39 +261,27 @@ app.post("/login", async (req, res) => {
 // });
 
 //Creating endoint for popular in women section
-app.get("/popularinwomen", async (req, res) => {
-  try {
-    const snapshot = await db
-      .collection("Products")
-      .where("category", "==", "women")
-      .get();
+// app.get("/popularinwomen", async (req, res) => {
+//     const productsRef = collection(db, "Products"); // Reference to the "Products" collection
+//     const q = query(productsRef, where("category", "==", "women")); // Query to get documents where category is "women"
 
-    if (snapshot.empty) {
-      return res
-        .status(404)
-        .json({ message: "No products found in women category" });
-    }
-    // Extract the product data from the snapshot
-    const products = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+//     try {
+//       const querySnapshot = await getDocs(q);
+//       const products = querySnapshot.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
 
-    // Get the top 4 products
-    // const popular_in_women = products.slice(0, 4);
+//       // Get the top 4 products
+//       const data = products.slice(0, 4);
 
-    console.log("Popular in women fetched");
-    res.send(popular_in_women);
-  } catch (error) {
-    console.error("Error fetching popular in women:", error);
-    res.status(500).send("Error fetching popular products.");
-  }
-});
-
-//   let products = await Product.find({ category: "women" });
-//   let popular_in_women = products.slice(0, 4);
-//   console.log("Popular in women fetched");
-//   res.send(popular_in_women);
+//       // console.log("Popular in women fetched");
+//       res.send(data);
+//     } catch (error) {
+//       console.error("Error fetching popular in women:", error);
+//       res.status(500).send("Error fetching popular products.");
+//     }
+  
 // });
 
 //Creating middleware to fetch user

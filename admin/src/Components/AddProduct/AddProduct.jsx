@@ -77,7 +77,9 @@ const AddProduct = () => {
             // created_at: new Date(),
           });
           toast.success("Product added successfully");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+          document.body.scrollTop = 0; // For Safari
         } catch (uploadError) {
           // console.error("Error saving product:", uploadError);
         }
@@ -198,7 +200,7 @@ export default AddProduct;
 //     };
 //     try {
 //       const resonse2 = await fetch(
-//         "https://n-j-fashion-backend.vercel.app/addproduct",
+//         "http://localhost:4000/addproduct",
 //         {
 //           method: "post",
 //           headers: {
