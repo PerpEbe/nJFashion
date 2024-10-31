@@ -11,7 +11,7 @@ const Item = (props) => {
       <p>{props.name}</p>
       <div className="items-prices">
         <div className="item-price-new">Ksh {props.new_price}</div>
-        <div className="item-price-old">Ksh {props.old_price}</div>
+        <div className="item-price-old" style={{ textDecoration: "line-through" }}>Ksh {props.old_price}</div>
       </div>
     </div>
   );

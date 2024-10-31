@@ -54,13 +54,13 @@
     font-weight: 700;
 } */
 
-.productdisplay-right-price-old {
-  color: #818181;
+.productdisplay-right-price-old p{
   text-decoration: line-through;
+  color: #ff4141;
 }
 
 .productdisplay-right-price-new {
-  color: #ff4141;
+  color: #818181;
 }
 
 .productdisplay-right-size h1 {

@@ -8,16 +8,16 @@ const DescriptionBox = (props) => {
     <div className="descriptionbox">
       <div className="descriptionbox-navigator">
         <div className="descriptionbox-nav-box">Description</div>
-        <div className="descriptionbox-nav-box fade">Reviews (122)</div>
+        <div className="descriptionbox-nav-box fade">Reviews (0)</div>
       </div>
       <div className="descriptionbox-description">
         {/* <p>
          {product.description}
         </p> */}
         <p>
-          An ecommerce website is an onoine platform that facilitates the buying
-          and seling of products or ser eces over te internet seves as a virtual
-          marketlace where buiness and individula
+          nJFashion defines timeless,feminine style, translating key trends
+          into, wearable and attainable collections of footwear, apparel and
+          accessories.
         </p>
       </div>
     </div>

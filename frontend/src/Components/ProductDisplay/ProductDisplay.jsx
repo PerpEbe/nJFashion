@@ -33,7 +33,7 @@ const ProductDisplay = (props) => {
         </div>
         <div className="productdisplay-right-prices">
           <div className="productdisplay-right-price-old">
-            Ksh {product.old_price}
+            <p>Ksh {product.old_price}</p>
           </div>
           <div className="productdisplay-right-price-new">
             Ksh {product.new_price}

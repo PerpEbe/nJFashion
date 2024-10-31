@@ -19,9 +19,9 @@ export const Navbar = () => {
   return (
     <div className="navbar">
       <div className="nav-logo">
-        <Link to="/">
+        <Link style={{textDecoration:"none"}} to="/">
           <img src={logo} alt="logo" />
-        <p style={{ textDecoration: "none" }}>nJFashion</p>
+          <p>nJFashion</p>
         </Link>
       </div>
       <img
