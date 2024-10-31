@@ -1,5 +1,6 @@
 {
   "name": "nJFashion",
+  "displayName": "nJFashion",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

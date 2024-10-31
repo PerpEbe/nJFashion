@@ -4,7 +4,8 @@ import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from "../Assets/cart_cross_icon.png";
 
 const CartItems = () => {
-  const { all_product, cartItems, removeFromCart,getTotalCartAmount } = useContext(ShopContext);
+  const { all_product, cartItems, removeFromCart, getTotalCartAmount } =
+    useContext(ShopContext);
   return (
     <div className="cartitems">
       <div className="cartitems-format-main">
@@ -16,8 +17,12 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
+      
       {all_product.map((e) => {
         if (cartItems[e.id] > 0) {
+
+          // console.log(cartItems);
+          
           return (
             <div>
               <div className="cartitems-format cartitems-format-main">
@@ -40,6 +45,8 @@ const CartItems = () => {
             </div>
           );
         } else {
+          console.log(cartItems);
+          
           return null;
         }
       })}

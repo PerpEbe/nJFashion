@@ -44,9 +44,9 @@ app.options("/removeproduct", (req, res) => {
 });
 
 //Database Connection with MongoDB
-// const connectionString =
-//   "mongodb+srv://ewasilwa19:1e1jWtnpGVje0sJW@products.hhzkk.mongodb.net/?retryWrites=true&w=majority&appName=products";
-// mongoose.connect(connectionString);
+const connectionString =
+  "mongodb+srv://ewasilwa19:1e1jWtnpGVje0sJW@products.hhzkk.mongodb.net/?retryWrites=true&w=majority&appName=products";
+mongoose.connect(connectionString);
 
 //API Creation
 app.get("/", (req, res) => {
@@ -182,75 +182,134 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 // });
 
 //Schema creating for User model
-// const Users = mongoose.model("Users", {
-//   name: {
-//     type: String,
-//   },
-//   email: {
-//     type: String,
-//   },
-//   password: {
-//     type: String,
-//   },
-//   cartData: {
-//     type: Object,
-//   },
-//   date: {
-//     type: Date,
-//     default: Date.now,
-//   },
-// });
+const Users = mongoose.model("Users", {
+  name: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
+  cartData: {
+    type: Object,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 //Creating Endpoint for Registering a User
-app.post("/signup", async (req, res) => {
-  let check = await Users.findOne({ email: req.body.email });
-  if (check) {
-    return res.status(400).json({
-      success: false,
-      errors: "existing user found with same email address",
-    });
-  }
-  let cart = {};
-  for (let i = 0; i < 300; i++) {
-    cart[i] = 0;
-  }
-  const user = new Users({
-    name: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    cartData: cart,
-  });
-  await user.save();
+app.post("/signup", async (req,res)=>{
+  try {
+    const userSnapshot=await usersRef.where("email", "==", req.body.email).get();
+    if(!userSnapshot.empty){
+      return res.status(400).json({
+        success: false,
+        errors: "existing user found with same email address",
+      });
+    }
 
-  const data = {
-    user: {
-      id: user.id,
-    },
-  };
-  const token = jwt.sign(data, "secret_ecom");
-  res.json({ success: true, token });
-});
+    let cart={}
+    for(let i=0; i<300; i++){
+      cart[i]=0;
+    }
+
+    const userData={
+      name: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      cartData: cart,
+    }
+    const userDocRef=await usersRef.add(userData)
+
+    const data={user:{id:userDocRef.id}}
+    const token=jwt.sign(data, "secret_ecom")
+    res.json({success: true, token})
+  } catch (error) {
+    res.status(500).json({success: false, errors: "Error registering user"})
+  }
+})
 
 //Creating Endpoint for user login
 app.post("/login", async (req, res) => {
-  let user = await Users.findOne({ email: req.body.email });
-  if (user) {
+  try {
+    const userSnapshot = await usersRef.where("email", "==", req.body.email).get();
+    if (userSnapshot.empty) {
+      return res.json({ success: false, errors: "Wrong Email address" });
+    }
+
+    let user;
+    userSnapshot.forEach((doc) => {
+      user = doc.data();
+      user.id = doc.id; // Include document ID as user ID
+    });
+
     const passCompare = req.body.password === user.password;
     if (passCompare) {
-      const data = {
-        user: {
-          id: user.id,
-        },
-      };
+      const data = { user: { id: user.id } };
       const token = jwt.sign(data, "secret_ecom");
       res.json({ success: true, token });
     } else {
       res.json({ success: false, errors: "Wrong password" });
     }
-  } else {
-    res.json({ success: false, errors: "Wrong Email address" });
+  } catch (error) {
+    res.status(500).json({ success: false, errors: "Error logging in user" });
   }
 });
+
+
+// app.post("/signup", async (req, res) => {
+//   let check = await Users.findOne({ email: req.body.email });
+//   if (check) {
+//     return res.status(400).json({
+//       success: false,
+//       errors: "existing user found with same email address",
+//     });
+//   }
+//   let cart = {};
+//   for (let i = 0; i < 300; i++) {
+//     cart[i] = 0;
+//   }
+//   const user = new Users({
+//     name: req.body.username,
+//     email: req.body.email,
+//     password: req.body.password,
+//     cartData: cart,
+//   });
+//   await user.save();
+
+//   const data = {
+//     user: {
+//       id: user.id,
+//     },
+//   };
+//   const token = jwt.sign(data, "secret_ecom");
+//   res.json({ success: true, token });
+// });
+
+//Creating Endpoint for user login
+// app.post("/login", async (req, res) => {
+//   let user = await Users.findOne({ email: req.body.email });
+//   if (user) {
+//     const passCompare = req.body.password === user.password;
+//     if (passCompare) {
+//       const data = {
+//         user: {
+//           id: user.id,
+//         },
+//       };
+//       const token = jwt.sign(data, "secret_ecom");
+//       res.json({ success: true, token });
+//     } else {
+//       res.json({ success: false, errors: "Wrong password" });
+//     }
+//   } else {
+//     res.json({ success: false, errors: "Wrong Email address" });
+//   }
+// });
 
 //Creating endpoint for newscollection data
 // app.get("/newcollections", async (req, res) => {
@@ -261,28 +320,28 @@ app.post("/login", async (req, res) => {
 // });
 
 //Creating endoint for popular in women section
-// app.get("/popularinwomen", async (req, res) => {
-//     const productsRef = collection(db, "Products"); // Reference to the "Products" collection
-//     const q = query(productsRef, where("category", "==", "women")); // Query to get documents where category is "women"
+app.get("/popularinwomen", async (req, res) => {
+    const productsRef = collection(db, "Products"); // Reference to the "Products" collection
+    const q = query(productsRef, where("category", "==", "women")); // Query to get documents where category is "women"
 
-//     try {
-//       const querySnapshot = await getDocs(q);
-//       const products = querySnapshot.docs.map((doc) => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }));
+    try {
+      const querySnapshot = await getDocs(q);
+      const products = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-//       // Get the top 4 products
-//       const data = products.slice(0, 4);
+      // Get the top 4 products
+      const data = products.slice(0, 4);
 
-//       // console.log("Popular in women fetched");
-//       res.send(data);
-//     } catch (error) {
-//       console.error("Error fetching popular in women:", error);
-//       res.status(500).send("Error fetching popular products.");
-//     }
+      // console.log("Popular in women fetched");
+      res.send(data);
+    } catch (error) {
+      console.error("Error fetching popular in women:", error);
+      res.status(500).send("Error fetching popular products.");
+    }
   
-// });
+});
 
 //Creating middleware to fetch user
 const fetchUser = async (req, res, next) => {

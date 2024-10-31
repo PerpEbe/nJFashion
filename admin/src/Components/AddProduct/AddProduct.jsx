@@ -203,7 +203,7 @@ export default AddProduct;
 //     };
 //     try {
 //       const resonse2 = await fetch(
-//         "https://n-j-fashion-backend.vercel.app/addproduct",
+//         "http://localhost:4000/addproduct",
 //         {
 //           method: "post",
 //           headers: {

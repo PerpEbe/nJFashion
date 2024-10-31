@@ -19,7 +19,7 @@ const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
 
   // const fetchInfo = async () => {
-  //   await fetch("https://n-j-fashion-backend.vercel.app/allproducts")
+  //   await fetch("http://localhost:4000/allproducts")
   //     .then((resp) => resp.json())
   //     .then((data) => {
   //       setAllProducts(data);
@@ -85,8 +85,8 @@ const ListProduct = () => {
                   className="listproduct-product-icon"
                 />
                 <p>{product.name}</p>
-                <p>${product.old_price}</p>
-                <p>${product.new_price}</p>
+                <p>Ksh. {product.old_price}</p>
+                <p>Ksh. {product.new_price}</p>
                 <p>{product.category}</p>
                 <img
                   onClick={() => remove_product(product.id, product.image)} // Correct event handler

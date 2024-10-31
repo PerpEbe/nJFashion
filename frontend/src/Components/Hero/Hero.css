@@ -1,6 +1,11 @@
 .hero{
     height: 100vh;
-    background: linear-gradient(180deg, #fde1ff,#e1ffea22 60%);
+    /* background: linear-gradient(180deg, #fde1ff,#e1ffea22 60%); */
+    /* background: linear-gradient(180deg, #D3D3D3 ,#e1ffea22 60%); */
+    /* background: linear-gradient(180deg, #ADD8E6 ,#e1ffea22 60%); */
+    /* background: linear-gradient(180deg, #FFC0CB ,#e1ffea22 60%); */
+    /* background: linear-gradient(180deg, #98FF98  ,#e1ffea22 60%); */
+    background: linear-gradient(180deg, #FFFACD  ,#e1ffea22 60%);
     display: flex;
 }
 .hero-left{

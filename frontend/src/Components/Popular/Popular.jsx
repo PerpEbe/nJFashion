@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Popular.css";
 // import data_product from '../Assets/data';
-import Item from "../Item/Item";
-import { db } from "../../firebase";
+import Item from "../Item/Item.jsx";
+import { db } from "../../firebase.js";
 import { getDocs,where, collection, query } from "firebase/firestore";
 
 const Popular = () => {

@@ -18,7 +18,7 @@ const LoginSignup = () => {
   const login = async () => {
     console.log("Login function executed", formData);
     let responseData;
-    await fetch("https://n-j-fashion-backend.vercel.app/login", {
+    await fetch("http://localhost:4000/login", {
       method: "POST",
       headers: {
         Accept: "application/form-data",
@@ -35,10 +35,11 @@ const LoginSignup = () => {
       alert(responseData.errors);
     }
   };
+  
   const signup = async () => {
     console.log("Signup function executed", formData);
     let responseData;
-    await fetch("https://n-j-fashion-backend.vercel.app/signup", {
+    await fetch("http://localhost:4000/signup", {
       method: "POST",
       headers: {
         Accept: "application/form-data",
