@@ -22,8 +22,7 @@ const Footer = () => {
   //   window.open("https://www.facebook.com/njfashion/");
   // };
   const handleClickWhatsapp = () => {
-    // window.open("https://wa.me/919999999999");
-    window.open("https://wa.me/112681608");
+    window.open("https://wa.me/254112681608");
   };
   return (
     <div className="footer">

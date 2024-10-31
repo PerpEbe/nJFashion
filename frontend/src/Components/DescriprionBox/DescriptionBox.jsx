@@ -15,7 +15,7 @@ const DescriptionBox = (props) => {
          {product.description}
         </p> */}
         <p>
-          nJFashion defines timeless,feminine style, translating key trends
+          nJFashion defines timeless style, translating key trends
           into, wearable and attainable collections of footwear, apparel and
           accessories.
         </p>
