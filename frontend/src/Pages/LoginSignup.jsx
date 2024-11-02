@@ -2,6 +2,12 @@ import React from "react";
 import "./CSS/LoginSignup.css";
 import { useState } from "react";
 // import {setState} from 'react-route-dom'
+import { auth, db } from "../firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const LoginSignup = () => {
   const [state, setState] = useState("Login");
@@ -15,45 +21,58 @@ const LoginSignup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const login = async () => {
-    console.log("Login function executed", formData);
-    let responseData;
-    await fetch("http://localhost:4000/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.errors);
-    }
-  };
-  
+  // Signup function: register user and save their details in Firestore
   const signup = async () => {
     console.log("Signup function executed", formData);
-    let responseData;
-    await fetch("http://localhost:4000/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
-      localStorage.setItem("auth-token", responseData.token);
+
+    try {
+      //create a new user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+
+      //save additional user info in firestore
+      await setDoc(doc(db, "users", user.uid), {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      });
+      // alert("Signup successful! Redirecting...");
       window.location.replace("/");
-    } else {
-      alert(responseData.errors);
+    } catch (error) {
+      console.error("Signup error: ", error);
+      alert("Error signing up. please try again");
+    }
+  };
+
+  // Login function: authenticate user and retrieve their data from Firestore
+  const login = async () => {
+    console.log("Login function executed", formData);
+    try {
+      // Sign in with email and password
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+
+      // Retrieve user data from Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        console.log("User data:", userDoc.data());
+        localStorage.setItem("auth-token", user.uid); // Store user ID as token
+        alert("Login successful!");
+        window.location.replace("/");
+      } else {
+        alert("User not found.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Error logging in. Please try again.");
     }
   };
 

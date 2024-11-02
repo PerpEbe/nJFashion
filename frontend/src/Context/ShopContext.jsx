@@ -27,10 +27,6 @@ const ShopContextProvider = (props) => {
       setAll_Product(all_product);
     });
 
-    // fetch("http://localhost:4000/allproducts")
-    //   .then((response) => response.json())
-    //   .then((data) => setAll_Product(data));
-
     if (localStorage.getItem("auth-token")) {
       fetch("http://localhost:4000/getcart", {
         method: "post",
@@ -39,10 +35,21 @@ const ShopContextProvider = (props) => {
           "auth-token": `${localStorage.getItem("auth-token")}`,
           "Content-Type": "application/json",
         },
-        body: "",
+        body: JSON.stringify({
+          authToken: localStorage.getItem("auth-token"),
+        }),
       })
-        .then((response) => response.json())
-        .then((data) => setCartItems(data));
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch cart: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => setCartItems(data))
+        .catch((error) => {
+          console.error("Error fetching cart items:", error);
+          // Handle error gracefully (e.g., display error message to user)
+        });
     }
   }, []);
   // console.log(cartItems);

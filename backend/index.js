@@ -1,5 +1,5 @@
 const port = 4000;
-import express  from "express";
+import express from "express";
 const app = express();
 // import mongoose = require("mongoose"); //using this we can use the mongo database
 import jwt from "jsonwebtoken"; //we can generate token and uverify the token
@@ -7,20 +7,15 @@ import multer from "multer"; //we can create image storage system
 import path from "path";
 import cors from "cors"; //provide access to react project
 import admin from "firebase-admin";
-// import serviceAccount from "./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json";
 
+// const serviceAccount =require( "./config/njfashion-d0819-firebase-adminsdk-hzii6-2be3ee19b1.json");
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
 //   storageBucket: '2be3ee19b163c331aefa879b7e4792f93ca4b418.appspot.com'
 // });
 
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
-import { collection,where,query,getDocs } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, where, query, getDocs } from "firebase/firestore";
 import { db } from "./firebase.js";
 
 app.use(express.json()); //pass whatever request in json format
@@ -28,6 +23,8 @@ app.use(express.json()); //pass whatever request in json format
 // Specify multiple origins
 const allowedOrigins = [
   "https://n-j-fashion-admin.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:5173",
   "https://n-j-fashion-frontend.vercel.app", // Add other frontend origins here
 ];
 
@@ -44,9 +41,9 @@ app.options("/removeproduct", (req, res) => {
 });
 
 //Database Connection with MongoDB
-const connectionString =
-  "mongodb+srv://ewasilwa19:1e1jWtnpGVje0sJW@products.hhzkk.mongodb.net/?retryWrites=true&w=majority&appName=products";
-mongoose.connect(connectionString);
+// const connectionString =
+//   "mongodb+srv://ewasilwa19:1e1jWtnpGVje0sJW@products.hhzkk.mongodb.net/?retryWrites=true&w=majority&appName=products";
+// mongoose.connect(connectionString);
 
 //API Creation
 app.get("/", (req, res) => {
@@ -182,61 +179,68 @@ app.post("/upload", multer().single("image"), async (req, res) => {
 // });
 
 //Schema creating for User model
-const Users = mongoose.model("Users", {
-  name: {
-    type: String,
-  },
-  email: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  cartData: {
-    type: Object,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+// const Users = mongoose.model("Users", {
+//   name: {
+//     type: String,
+//   },
+//   email: {
+//     type: String,
+//   },
+//   password: {
+//     type: String,
+//   },
+//   cartData: {
+//     type: Object,
+//   },
+//   date: {
+//     type: Date,
+//     default: Date.now,
+//   },
+// });
 
 //Creating Endpoint for Registering a User
-app.post("/signup", async (req,res)=>{
+// const db=admin.firestore()
+// const usersRef=db.collection("users")
+
+app.post("/signup", async (req, res) => {
   try {
-    const userSnapshot=await usersRef.where("email", "==", req.body.email).get();
-    if(!userSnapshot.empty){
+    const userSnapshot = await usersRef
+      .where("email", "==", req.body.email)
+      .get();
+    if (!userSnapshot.empty) {
       return res.status(400).json({
         success: false,
         errors: "existing user found with same email address",
       });
     }
 
-    let cart={}
-    for(let i=0; i<300; i++){
-      cart[i]=0;
+    let cart = {};
+    for (let i = 0; i < 300; i++) {
+      cart[i] = 0;
     }
 
-    const userData={
+    const userData = {
       name: req.body.username,
       email: req.body.email,
       password: req.body.password,
       cartData: cart,
-    }
-    const userDocRef=await usersRef.add(userData)
+    };
+    const userDocRef = await usersRef.add(userData);
 
-    const data={user:{id:userDocRef.id}}
-    const token=jwt.sign(data, "secret_ecom")
-    res.json({success: true, token})
+    const data = { user: { id: userDocRef.id } };
+    const token = jwt.sign(data, "secret_ecom");
+    res.json({ success: true, token });
   } catch (error) {
-    res.status(500).json({success: false, errors: "Error registering user"})
+    res.status(500).json({ success: false, errors: "Error registering user" });
   }
-})
+});
 
 //Creating Endpoint for user login
 app.post("/login", async (req, res) => {
   try {
-    const userSnapshot = await usersRef.where("email", "==", req.body.email).get();
+    const userSnapshot = await usersRef
+      .where("email", "==", req.body.email)
+      .get();
     if (userSnapshot.empty) {
       return res.json({ success: false, errors: "Wrong Email address" });
     }
@@ -259,7 +263,6 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ success: false, errors: "Error logging in user" });
   }
 });
-
 
 // app.post("/signup", async (req, res) => {
 //   let check = await Users.findOne({ email: req.body.email });
@@ -321,26 +324,25 @@ app.post("/login", async (req, res) => {
 
 //Creating endoint for popular in women section
 app.get("/popularinwomen", async (req, res) => {
-    const productsRef = collection(db, "Products"); // Reference to the "Products" collection
-    const q = query(productsRef, where("category", "==", "women")); // Query to get documents where category is "women"
+  const productsRef = collection(db, "Products"); // Reference to the "Products" collection
+  const q = query(productsRef, where("category", "==", "women")); // Query to get documents where category is "women"
 
-    try {
-      const querySnapshot = await getDocs(q);
-      const products = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+  try {
+    const querySnapshot = await getDocs(q);
+    const products = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-      // Get the top 4 products
-      const data = products.slice(0, 4);
+    // Get the top 4 products
+    const data = products.slice(0, 4);
 
-      // console.log("Popular in women fetched");
-      res.send(data);
-    } catch (error) {
-      console.error("Error fetching popular in women:", error);
-      res.status(500).send("Error fetching popular products.");
-    }
-  
+    // console.log("Popular in women fetched");
+    res.send(data);
+  } catch (error) {
+    console.error("Error fetching popular in women:", error);
+    res.status(500).send("Error fetching popular products.");
+  }
 });
 
 //Creating middleware to fetch user
@@ -362,46 +364,83 @@ const fetchUser = async (req, res, next) => {
 };
 
 //creating endpoint for adding products in cart
-app.post("/addtocart", fetchUser, async (req, res) => {
-  console.log("Added", req.body.itemId);
-  let userData = await Users.findOne({ _id: req.user.id });
-  userData.cartData[req.body.itemId] += 1;
-  await Users.findOneAndUpdate(
-    { _id: req.user.id },
-    { cartData: userData.cartData }
-  );
-  res.send("Added");
-});
+// app.post("/addtocart", fetchUser, async (req, res) => {
+//   console.log("Added", req.body.itemId);
+//   let userData = await Users.findOne({ _id: req.user.id });
+//   userData.cartData[req.body.itemId] += 1;
+//   await Users.findOneAndUpdate(
+//     { _id: req.user.id },
+//     { cartData: userData.cartData }
+//   );
+//   res.send("Added");
+// });
+
+// Assuming 'users' collection stores user data
+// const userRef = db.collection('users').doc(req.user.id);
+await userRef.set(
+  {
+    cartData: {
+      ...userData.cartData, // Spread existing cart data
+      [req.body.itemId]: userData.cartData[req.body.itemId] + 1, // Update quantity for the added item
+    },
+  },
+  { merge: true }
+); // Only update relevant fields (cartData in this case)
+res.send("Added");
 
 //Creating endpoint to remove product from cartdata
-app.post("/removefromcart", fetchUser, async (req, res) => {
-  console.log("removed", req.body.itemId);
-  let userData = await Users.findOne({ _id: req.user.id });
-  if (userData.cartData[req.body.itemId] > 0)
-    userData.cartData[req.body.itemId] -= 1;
-  await Users.findOneAndUpdate(
-    { _id: req.user.id },
-    { cartData: userData.cartData }
-  );
-  res.send("Removed");
-});
+// app.post("/removefromcart", fetchUser, async (req, res) => {
+//   console.log("removed", req.body.itemId);
+//   let userData = await Users.findOne({ _id: req.user.id });
+//   if (userData.cartData[req.body.itemId] > 0)
+//     userData.cartData[req.body.itemId] -= 1;
+//   await Users.findOneAndUpdate(
+//     { _id: req.user.id },
+//     { cartData: userData.cartData }
+//   );
+//   res.send("Removed");
+// });
+
+const userRef = db.collection("users").doc(req.user.id);
+await userRef.set(
+  {
+    cartData: {
+      ...userData.cartData, // Spread existing cart data
+      [req.body.itemId]: Math.max(userData.cartData[req.body.itemId] - 1, 0), // Decrement, but ensure quantity doesn't go negative
+    },
+  },
+  { merge: true }
+);
+res.send("Removed");
 
 //Creating endpoint to get cartdata
 app.post("/getcart", fetchUser, async (req, res) => {
   try {
-    const userData = await Users.findOne({ _id: req.user.id });
+    const { authToken } = req.body;
 
-    if (!userData) {
-      return res.status(404).send("User not found"); // Handle user not found scenario
+    // const userData = await Users.findOne({ _id: req.user.id });
+    // const userData = db.collection('users').doc(req.user.id).get();
+
+    // Verify authToken (replace with your authentication logic)
+    // const isUserAuthenticated = await verifyAuthToken(authToken);
+    // if (!isUserAuthenticated) {
+    //   return res.status(401).send("Unauthorized"); // User not authorized
+    // }
+    
+    const userRef = db.collection("users").doc(req.user.id); // Assuming you have `req.user.id`
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send("User not found");
     }
 
-    res.json(userData.cartData); // Send response only if user is found
+    const userData = userDoc.data();
+    res.json(userData.cartData);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal server error"); // Handle unexpected errors
+    res.status(500).send("Internal server error");
   }
 });
-
 app.listen(port, (error) => {
   if (!error) {
     console.log("Server Running on port " + port);

@@ -1,12 +1,11 @@
 import React from "react";
 import "./Footer.css";
 import footer_logo from "../Assets/logo_big.png";
-import instagram_icon from '../Assets/instagram_icon.png'
-import pinterst_icon from '../Assets/pintester_icon.png'
-import facebook_icon from '../Assets/facebook_icon.png'
-import x_icon from '../Assets/x_icon.png'
-import whatsapp_icon from '../Assets/whatsapp_icon.png'
-
+import instagram_icon from "../Assets/instagram_icon.png";
+import pinterst_icon from "../Assets/pintester_icon.png";
+import facebook_icon from "../Assets/facebook_icon.png";
+import x_icon from "../Assets/x_icon.png";
+import whatsapp_icon from "../Assets/whatsapp_icon.png";
 
 const Footer = () => {
   const getYear = () => {
@@ -24,6 +23,7 @@ const Footer = () => {
   const handleClickWhatsapp = () => {
     window.open("https://wa.me/254112681608");
   };
+
   return (
     <div className="footer">
       <div className="footer-logo">
@@ -39,19 +39,19 @@ const Footer = () => {
       </ul>
       <div className="footer-social-icon">
         <div className="footer-icons-container">
-            <img src={facebook_icon} alt="" />
+          <img src={facebook_icon} alt="" />
         </div>
         <div className="footer-icons-container">
-            <img src={instagram_icon} alt="" />
+          <img src={instagram_icon} alt="" />
         </div>
         <div className="footer-icons-container">
-            <img src={pinterst_icon} alt="" />
+          <img src={pinterst_icon} alt="" />
         </div>
         <div className="footer-icons-container">
-            <img onClick={handleClickWhatsapp} src={whatsapp_icon} alt="" />
+          <img onClick={handleClickWhatsapp} src={whatsapp_icon} alt="" />
         </div>
         <div className="footer-icons-container">
-            <img src={x_icon} alt="" />
+          <img src={x_icon} alt="" />
         </div>
       </div>
       <div className="footer-copyright">
