@@ -33,10 +33,10 @@ const AddProduct = () => {
   };
 
   const Add_Product = async () => {
-    // if (!productDetails.name || !productDetails.old_price) {
-    //   alert("Please fill in all the details");
-    //   return;
-    // }
+    if (!productDetails.name || !productDetails.old_price || !productDetails.category || !productDetails.description || !productDetails.tag || !productDetails.new_price) {
+      toast.error("Please fill in all the details");
+      return;
+    }
 
     const storageRef = ref(
       storage,
@@ -80,6 +80,7 @@ const AddProduct = () => {
           window.scrollTo({ top: 0, behavior: "smooth" });
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           document.body.scrollTop = 0; // For Safari
+          window.scrollTo({ top: 0, behavior: "smooth" });
           
           toast.success("Product added successfully");
 
@@ -92,6 +93,26 @@ const AddProduct = () => {
 
   return (
     <div className="add-product">
+       <div className="addproduct-itemfield">
+        <label htmlFor="file-input">
+          <img
+            src={image ? URL.createObjectURL(image) : upload_area}
+            className="addproduct-thumbnail-img"
+            alt=""
+          />
+        </label>
+        <input
+          // onChange={imageHandler()}
+          onChange={(e) => {
+            handleImageChange(e);
+          }}
+          type="file"
+          name="image"
+          id="file-input"
+          accept="image/*"
+          hidden
+        />
+      </div>
       <div className="addproduct-itemfield">
         <p>Product Title</p>
         <input
@@ -161,26 +182,7 @@ const AddProduct = () => {
           <option value="kid">Kid</option>
         </select>
       </div>
-      <div className="addproduct-itemfield">
-        <label htmlFor="file-input">
-          <img
-            src={image ? URL.createObjectURL(image) : upload_area}
-            className="addproduct-thumbnail-img"
-            alt=""
-          />
-        </label>
-        <input
-          // onChange={imageHandler()}
-          onChange={(e) => {
-            handleImageChange(e);
-          }}
-          type="file"
-          name="image"
-          id="file-input"
-          accept="image/*"
-          hidden
-        />
-      </div>
+     
       <button
         onClick={() => {
           Add_Product();
