@@ -40,9 +40,10 @@ const logout=()=>{
       <div className="nav-logo">
         <Link style={{textDecoration:"none"}} to="/">
           <img src={logo} alt="logo" />
-          <p>nJFashion</p>
         </Link>
+          <p>nJFashion</p>
       </div>
+
       <img
         onClick={dropdown_toggle}
         className="nav-dropdown"

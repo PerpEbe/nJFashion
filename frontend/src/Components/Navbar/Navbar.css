@@ -4,6 +4,7 @@
     padding: 16px;
     box-shadow: 0 1px 3px -2px black;
     align-items: center;
+    font-family: sans-serif;
 }
 
 .nav-logo {
@@ -13,7 +14,8 @@
 }
 
 .nav-logo img{
-    margin-right: 8px;
+    /* margin-right: 2px; */
+    width: 80px;
 }
 .nav-logo p {
     color: #171717;
@@ -39,7 +41,7 @@
     justify-content: center;
     gap: 3px;
     cursor: pointer;
-    /* text-decoration: none; */
+    text-decoration: none;
 }
 
 .nav-menu hr {
@@ -92,7 +94,7 @@
     }
 
     .nav-logo img {
-        width: 40px;
+        width: 100px;
     }
 
     .nav-logo p {

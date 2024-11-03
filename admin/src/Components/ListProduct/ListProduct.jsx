@@ -52,7 +52,7 @@ const ListProduct = () => {
        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
        document.body.scrollTop = 0; // For Safari
        
-      toast.error("Product Deleted!");
+      toast.error("Product Removed");
     } catch (error) {
       console.log(error);
     }
