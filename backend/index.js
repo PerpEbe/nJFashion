@@ -377,16 +377,16 @@ const fetchUser = async (req, res, next) => {
 
 // Assuming 'users' collection stores user data
 // const userRef = db.collection('users').doc(req.user.id);
-await userRef.set(
-  {
-    cartData: {
-      ...userData.cartData, // Spread existing cart data
-      [req.body.itemId]: userData.cartData[req.body.itemId] + 1, // Update quantity for the added item
-    },
-  },
-  { merge: true }
-); // Only update relevant fields (cartData in this case)
-res.send("Added");
+// await userRef.set(
+//   {
+//     cartData: {
+//       ...userData.cartData, // Spread existing cart data
+//       [req.body.itemId]: userData.cartData[req.body.itemId] + 1, // Update quantity for the added item
+//     },
+//   },
+//   { merge: true }
+// ); // Only update relevant fields (cartData in this case)
+// res.send("Added");
 
 //Creating endpoint to remove product from cartdata
 // app.post("/removefromcart", fetchUser, async (req, res) => {
@@ -401,46 +401,46 @@ res.send("Added");
 //   res.send("Removed");
 // });
 
-const userRef = db.collection("users").doc(req.user.id);
-await userRef.set(
-  {
-    cartData: {
-      ...userData.cartData, // Spread existing cart data
-      [req.body.itemId]: Math.max(userData.cartData[req.body.itemId] - 1, 0), // Decrement, but ensure quantity doesn't go negative
-    },
-  },
-  { merge: true }
-);
-res.send("Removed");
+// const userRef = db.collection("users").doc(req.user.id);
+// await userRef.set(
+//   {
+//     cartData: {
+//       ...userData.cartData, // Spread existing cart data
+//       [req.body.itemId]: Math.max(userData.cartData[req.body.itemId] - 1, 0), // Decrement, but ensure quantity doesn't go negative
+//     },
+//   },
+//   { merge: true }
+// );
+// res.send("Removed");
 
 //Creating endpoint to get cartdata
-app.post("/getcart", fetchUser, async (req, res) => {
-  try {
-    const { authToken } = req.body;
+// app.post("/getcart", fetchUser, async (req, res) => {
+//   try {
+//     const { authToken } = req.body;
 
-    // const userData = await Users.findOne({ _id: req.user.id });
-    // const userData = db.collection('users').doc(req.user.id).get();
+//     // const userData = await Users.findOne({ _id: req.user.id });
+//     // const userData = db.collection('users').doc(req.user.id).get();
 
-    // Verify authToken (replace with your authentication logic)
-    // const isUserAuthenticated = await verifyAuthToken(authToken);
-    // if (!isUserAuthenticated) {
-    //   return res.status(401).send("Unauthorized"); // User not authorized
-    // }
+//     // Verify authToken (replace with your authentication logic)
+//     // const isUserAuthenticated = await verifyAuthToken(authToken);
+//     // if (!isUserAuthenticated) {
+//     //   return res.status(401).send("Unauthorized"); // User not authorized
+//     // }
     
-    const userRef = db.collection("users").doc(req.user.id); // Assuming you have `req.user.id`
-    const userDoc = await userRef.get();
+//     const userRef = db.collection("users").doc(req.user.id); // Assuming you have `req.user.id`
+//     const userDoc = await userRef.get();
 
-    if (!userDoc.exists) {
-      return res.status(404).send("User not found");
-    }
+//     if (!userDoc.exists) {
+//       return res.status(404).send("User not found");
+//     }
 
-    const userData = userDoc.data();
-    res.json(userData.cartData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error");
-  }
-});
+//     const userData = userDoc.data();
+//     res.json(userData.cartData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal server error");
+//   }
+// });
 app.listen(port, (error) => {
   if (!error) {
     console.log("Server Running on port " + port);

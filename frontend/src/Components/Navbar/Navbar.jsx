@@ -5,6 +5,7 @@ import cart_icon from "../Assets/cart_icon.png";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
 import navbar_dropdown_round from "../Assets/navbar_dropdown_round.png";
+import {getAuth,signOut} from "firebase/auth";
 
 export const Navbar = () => {
   const [menu, setMenu] = useState("shop");
@@ -15,6 +16,24 @@ export const Navbar = () => {
     menuRef.current.classList.toggle("nav-menu-visible");
     e.target.classList.toggle("open");
   };
+
+const logout=()=>{
+  const auth=getAuth()
+  const userId=auth.currentUser?auth.currentUser.uid:null;
+
+  if(userId){
+    localStorage.removeItem(`cart_${userId}`)
+    localStorage.removeItem("auth-token");
+    window.location.replace("/");
+  }
+
+  signOut(auth).then(()=>{
+    console.log("Logged out successfully");
+    
+  }).catch((error) => {
+    console.error("Error logging out:", error);
+  });
+}
 
   return (
     <div className="navbar">
@@ -79,10 +98,7 @@ export const Navbar = () => {
       <div className="nav-login-cart">
         {localStorage.getItem("auth-token") ? (
           <button
-            onClick={() => {
-              localStorage.removeItem("auth-token");
-              window.location.replace("/");
-            }}
+            onClick={logout}
           >
             Logout
           </button>

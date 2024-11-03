@@ -65,7 +65,7 @@ const LoginSignup = () => {
       if (userDoc.exists()) {
         console.log("User data:", userDoc.data());
         localStorage.setItem("auth-token", user.uid); // Store user ID as token
-        alert("Login successful!");
+        // alert("Login successful!");
         window.location.replace("/");
       } else {
         alert("User not found.");
