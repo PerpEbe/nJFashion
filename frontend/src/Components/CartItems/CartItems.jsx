@@ -17,14 +17,13 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      
+
       {all_product.map((e) => {
         if (cartItems[e.id] > 0) {
-
           // console.log(cartItems);
-          
+
           return (
-            <div>
+            <div key={e.id}>
               <div className="cartitems-format cartitems-format-main">
                 <img src={e.image} className="carticon-product-icon" alt="" />
                 <p>{e.name}</p>
@@ -46,7 +45,7 @@ const CartItems = () => {
           );
         } else {
           console.log(cartItems);
-          
+
           return null;
         }
       })}
