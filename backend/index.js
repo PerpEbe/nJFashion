@@ -257,7 +257,7 @@ app.post("/login", async (req, res) => {
       const token = jwt.sign(data, "secret_ecom");
       res.json({ success: true, token });
     } else {
-      res.json({ success: false, errors: "Wrong password" });
+      res.json({ success: false, errors: "Incorrect password" });
     }
   } catch (error) {
     res.status(500).json({ success: false, errors: "Error logging in user" });

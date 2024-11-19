@@ -4,6 +4,8 @@ import { useState } from "react";
 // import {setState} from 'react-route-dom'
 import { auth, db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import {ToastContainer,toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -65,14 +67,15 @@ const LoginSignup = () => {
       if (userDoc.exists()) {
         console.log("User data:", userDoc.data());
         localStorage.setItem("auth-token", user.uid); // Store user ID as token
-        // alert("Login successful!");
+        toast.success("Login successful!");
         window.location.replace("/");
       } else {
         alert("User not found.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Error logging in. Please try again.");
+      // alert("Error logging in. Please try again.");
+      toast.error("Your credentials are incorrect!");
     }
   };
 
@@ -143,6 +146,7 @@ const LoginSignup = () => {
           <p>By continuing, I agree to the terms of use & privacy policy</p>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

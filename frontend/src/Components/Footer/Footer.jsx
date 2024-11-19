@@ -11,9 +11,9 @@ const Footer = () => {
   const getYear = () => {
     return new Date().getFullYear();
   };
-  // const handleClick = () => {
-  //   window.open("https://www.instagram.com/njfashion/");
-  // };
+  const handleClickX = () => {
+    window.open("https://x.com/jimmyotieno3/");
+  };
   // const handleClickPinterst = () => {
   //   window.open("https://www.pinterest.com/njfashion/");
   // };
@@ -51,7 +51,7 @@ const Footer = () => {
           <img onClick={handleClickWhatsapp} src={whatsapp_icon} alt="" />
         </div>
         <div className="footer-icons-container">
-          <img src={x_icon} alt="" />
+          <img onClick={handleClickX} src={x_icon} alt="" />
         </div>
       </div>
       <div className="footer-copyright">
