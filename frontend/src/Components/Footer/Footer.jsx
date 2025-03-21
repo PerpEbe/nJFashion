@@ -56,7 +56,7 @@ const Footer = () => {
       </div>
       <div className="footer-copyright">
         <hr />
-        <p>Copyright &copy {getYear()} All Rights Reserved</p>
+        <p>Copyright &copy; {getYear()} All Rights Reserved</p>
       </div>
     </div>
   );
